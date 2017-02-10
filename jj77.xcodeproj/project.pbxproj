@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A9C97151E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */; };
+		5AA200181E3E8B050059395F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA200171E3E8B050059395F /* CoreDataManager.swift */; };
 		5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA66CD61E3D6FBC00777413 /* AppDelegate.swift */; };
 		5AA66CD91E3D6FBC00777413 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA66CD81E3D6FBC00777413 /* ViewController.swift */; };
 		5AA66CDC1E3D6FBC00777413 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AA66CDA1E3D6FBC00777413 /* Main.storyboard */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AreaOfIntrestTableViewController.swift; sourceTree = "<group>"; };
+		5AA200171E3E8B050059395F /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = ../CoreDataManager.swift; sourceTree = "<group>"; };
 		5AA66CD31E3D6FBC00777413 /* jj77.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jj77.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AA66CD61E3D6FBC00777413 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AA66CD81E3D6FBC00777413 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +60,7 @@
 		5AA66CD51E3D6FBC00777413 /* jj77 */ = {
 			isa = PBXGroup;
 			children = (
+				5AA200171E3E8B050059395F /* CoreDataManager.swift */,
 				5AA66CD61E3D6FBC00777413 /* AppDelegate.swift */,
 				5AA66CD81E3D6FBC00777413 /* ViewController.swift */,
 				5AA66CDA1E3D6FBC00777413 /* Main.storyboard */,
@@ -63,6 +68,7 @@
 				5AA66CE21E3D6FBC00777413 /* LaunchScreen.storyboard */,
 				5AA66CE51E3D6FBC00777413 /* Info.plist */,
 				5AA66CDD1E3D6FBC00777413 /* jj77.xcdatamodeld */,
+				5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */,
 			);
 			path = jj77;
 			sourceTree = "<group>";
@@ -141,7 +147,9 @@
 			files = (
 				5AA66CDF1E3D6FBC00777413 /* jj77.xcdatamodeld in Sources */,
 				5AA66CD91E3D6FBC00777413 /* ViewController.swift in Sources */,
+				5AA200181E3E8B050059395F /* CoreDataManager.swift in Sources */,
 				5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */,
+				5A9C97151E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +311,7 @@
 				5AA66CEA1E3D6FBC00777413 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
