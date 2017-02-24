@@ -204,17 +204,59 @@ class ViewController: UIViewController {
             request.httpBody = postString.data(using: String.Encoding.utf8)
             let task = URLSession.shared.dataTask(with: request as URLRequest){
                 data, response, error in
-                if error != nil
+                if error == nil
+                    
                 {
+                    print("entered error is nil")
+                    DispatchQueue.main.async (execute: { () -> Void in
+                        
+                        do {
+                            //get json result
+                            print("entered do")
+                            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                            //assign json to new var parsejson in secured way
+                            guard let parseJson = json else{
+                                print("error")
+                                return
+                            }
+                            //print(parseJson)
+                            //get name from parseJson dictionary
+                            let username = parseJson["UserName"]
+                            var loginstatus = String(describing: parseJson["flagging"]!)
+                            print(loginstatus)
+                            
+                            //if there is some user
+                            if loginstatus == "1"{
+                                self.performSegue(withIdentifier: "loginSegue", sender: self)
+                                print("entered user name block")
+                                print("username: \(username!)")
+                            }
+                            else{
+                                self.dummy.text="please enter valid username and password!!!"
+                                print("entered username is nil block")
+                            }
+                            
+
+                            
+                        }catch
+                        {
+                            print("error: \(error)")
+                        }
+                        //print("response = \(response)")
+                        let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                        print("response string = \(responseString!)")
+                        
+                    })
+
+                   
+                }
+                else
+                {
+                    //print("entered error is not nill")
                     print("error=\(error)")
+                    self.dummy.text=error as! String?
                     return
                 }
-                
-                
-                print("response = \(response)")
-                let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
-                print("response string = \(responseString)")
-                
             }//task closing
             task.resume()
 

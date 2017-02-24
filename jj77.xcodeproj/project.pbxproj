@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A234BBA1E5FC22000AAB1EC /* ObservationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A234BB91E5FC22000AAB1EC /* ObservationsViewController.swift */; };
+		5A234BBC1E5FC23C00AAB1EC /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A234BBB1E5FC23C00AAB1EC /* CategoriesViewController.swift */; };
+		5A234BBE1E5FC27E00AAB1EC /* ObservationTakingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A234BBD1E5FC27E00AAB1EC /* ObservationTakingViewController.swift */; };
 		5A9C97151E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */; };
 		5AA200181E3E8B050059395F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA200171E3E8B050059395F /* CoreDataManager.swift */; };
 		5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA66CD61E3D6FBC00777413 /* AppDelegate.swift */; };
@@ -18,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A234BB91E5FC22000AAB1EC /* ObservationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationsViewController.swift; sourceTree = "<group>"; };
+		5A234BBB1E5FC23C00AAB1EC /* CategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
+		5A234BBD1E5FC27E00AAB1EC /* ObservationTakingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationTakingViewController.swift; sourceTree = "<group>"; };
 		5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AreaOfIntrestTableViewController.swift; sourceTree = "<group>"; };
 		5AA200171E3E8B050059395F /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = ../CoreDataManager.swift; sourceTree = "<group>"; };
 		5AA66CD31E3D6FBC00777413 /* jj77.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jj77.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +75,9 @@
 				5AA66CE51E3D6FBC00777413 /* Info.plist */,
 				5AA66CDD1E3D6FBC00777413 /* jj77.xcdatamodeld */,
 				5A9C97141E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift */,
+				5A234BB91E5FC22000AAB1EC /* ObservationsViewController.swift */,
+				5A234BBB1E5FC23C00AAB1EC /* CategoriesViewController.swift */,
+				5A234BBD1E5FC27E00AAB1EC /* ObservationTakingViewController.swift */,
 			);
 			path = jj77;
 			sourceTree = "<group>";
@@ -146,9 +155,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AA66CDF1E3D6FBC00777413 /* jj77.xcdatamodeld in Sources */,
+				5A234BBE1E5FC27E00AAB1EC /* ObservationTakingViewController.swift in Sources */,
 				5AA66CD91E3D6FBC00777413 /* ViewController.swift in Sources */,
 				5AA200181E3E8B050059395F /* CoreDataManager.swift in Sources */,
 				5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */,
+				5A234BBA1E5FC22000AAB1EC /* ObservationsViewController.swift in Sources */,
+				5A234BBC1E5FC23C00AAB1EC /* CategoriesViewController.swift in Sources */,
 				5A9C97151E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
