@@ -72,6 +72,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         ac.addAction(okAction)
         let cancelAction = UIAlertAction(title: "Default", style: .default) { (_) in
             self.performSegue(withIdentifier: "defaultObserverView", sender: self)
+            print("Hello")
 //            let storyboardid = UIStoryboard(name: "categoriesBoard1", bundle: nil)
 //            let controller = storyboardid.instantiateViewController(withIdentifier: "observationtakingboard")
 //            self.present(controller, animated: true, completion: nil)
