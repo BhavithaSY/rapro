@@ -9,6 +9,20 @@
 import UIKit
 
 class ObservationsViewController: UIViewController {
+    
+    @IBOutlet weak var addNewObservation: UIButton!
+    
+    @IBAction func addnewobservationaction(_ sender: UIButton) {
+        
+        tabBarController?.selectedIndex=1
+        
+        
+        
+    }
+    
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
