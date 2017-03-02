@@ -42,7 +42,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+        
         //let the device in land scape mode
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
@@ -75,7 +75,10 @@ class ViewController: UIViewController {
         //CoreDataManager.fetchObj()
         
     }
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     
 //let the device open in landscape mode
     private func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {

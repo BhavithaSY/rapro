@@ -9,8 +9,8 @@
 import UIKit
 protocol showAlertOnCLick {
     
-    func showAlertWithText()
-    func showAlertWithTextforHeader()
+    func showAlertWithText(tableNum:Int)
+    func showAlertWithTextforHeader(tableNum:Int)
     
 }
 
@@ -19,6 +19,7 @@ class TableViewCellHeader: UITableViewCell {
     var delegate:showAlertOnCLick!
     
     var headerCellSection:Int?
+    var headerCellTable:Int?
     
     @IBOutlet weak var changenameonclick: UIButton!
     
@@ -27,12 +28,12 @@ class TableViewCellHeader: UITableViewCell {
     
     @IBAction func addRowButtonAction(_ sender: UIButton) {
         
-        self.delegate.showAlertWithText()
+        self.delegate.showAlertWithText(tableNum: self.headerCellTable!)
 
     }
     
     @IBAction func changename(_ sender: UIButton) {
-         self.delegate.showAlertWithTextforHeader()
+         self.delegate.showAlertWithTextforHeader(tableNum: self.headerCellTable!)
     }
     
     

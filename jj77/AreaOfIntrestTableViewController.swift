@@ -20,7 +20,12 @@ self.navigationItem.setHidesBackButton(true, animated:true);
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationItem.setHidesBackButton(true, animated:true);
+        //self.navigationItem.setHidesBackButton(true, animated:true);
+        
+            super.viewWillAppear(animated)
+            self.navigationController?.isNavigationBarHidden = true
+        
+
     }
     
     override func didReceiveMemoryWarning() {

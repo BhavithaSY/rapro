@@ -36,6 +36,11 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
+            super.viewWillAppear(animated)
+            self.navigationController?.isNavigationBarHidden = true
+        
+
     }
      func numberOfSections(CategoriesTable: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
