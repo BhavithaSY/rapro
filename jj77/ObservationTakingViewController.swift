@@ -9,7 +9,9 @@
 import UIKit
 
 class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,showAlertOnCLick {
+    
 
+    
     @IBOutlet weak var table1: UITableView!
     
     @IBOutlet weak var table2: UITableView!
@@ -18,7 +20,76 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     
     @IBOutlet weak var table4: UITableView!
     
+    @IBOutlet weak var timerLabel: UILabel!
     
+    @IBOutlet weak var startTimerButton: UIButton!
+    
+    @IBOutlet weak var detailsTable: UITableView!
+    
+    @IBOutlet weak var htk: UILabel!
+    
+    
+    
+    
+    @IBAction func stopTimerAction(_ sender: UIButton) {
+        flagForTimerbeingpausedorstopped=true
+        self.startTimerButton.setImage(UIImage(named : "Play Filled-50"), for: .normal)
+        self.navigationController?.setNavigationBarHidden(false,animated: true)
+        
+        self.currenttime=0
+        self.timerLabel.text="00:00:00"
+        timer?.invalidate()
+        //disabling table selection
+        table4.allowsSelection=false
+        table3.allowsSelection=false
+        table2.allowsSelection=false
+        table1.allowsSelection=false
+    }
+    
+    @IBAction func starTimerAction(_ sender: UIButton) {
+        //self.flagForTimer=true
+        
+        if timer != nil
+        {
+            flagForTimerbeingpausedorstopped=true
+            self.navigationController?.setNavigationBarHidden(false,animated: true)
+           self.startTimerButton.setImage(UIImage(named : "Play Filled-50"), for: .normal)
+            timer?.invalidate()
+            timer=nil
+            //disabling tabe selection
+            table4.allowsSelection=false
+            table3.allowsSelection=false
+            table2.allowsSelection=false
+            table1.allowsSelection=false
+            
+            
+        }
+        else
+        {
+            
+            flagForTimerbeingpausedorstopped=false
+            self.navigationController?.setNavigationBarHidden(true,animated: true)
+            self.startTimerButton.setImage(UIImage(named : "Pause Filled-50"), for: .normal)
+            timer=Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true){ _ in
+                self.currenttime += 1
+                let hours = String(format:"%02d",self.currenttime / 3600)
+                let minutes = String(format: "%02d", self.currenttime / 60)
+                let seconds = String(format:"%02d",self.currenttime % 60)
+                self.timerLabel.text="\(hours):\(minutes):\(seconds)"
+                
+                //enabling table selection
+                self.table4.allowsSelection=true
+                self.table3.allowsSelection=true
+                self.table2.allowsSelection=true
+                self.table1.allowsSelection=true
+            }
+            
+        }
+        
+    }
+    var timer:Timer?
+    var currenttime=0
+   var flagForTimerbeingpausedorstopped:Bool?
     var rows1:[String]=["Errors of commission","Errors of Omission","Analysis Paralysis","Requesting Information","Error Recovery","User gets stuck","User express frustration"]
     var rows2:[String]=[" "]
     var rows3:[String]=["Low","Medium","Serious","Critical"]
@@ -31,6 +102,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.startTimerButton.setImage(UIImage(named : "Play Filled-50"), for: .normal)
         //for table 1
         self.table1.delegate=self
         self.table1.dataSource=self
@@ -38,6 +110,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         table1.layer.masksToBounds = true
         table1.layer.borderColor = UIColor( red:204/255, green:204/255, blue:204/255, alpha:1.0 ).cgColor
         table1.layer.borderWidth = 2.0
+        table1.allowsSelection=false
         //for table2
         self.table2.delegate=self
         self.table2.dataSource=self
@@ -45,6 +118,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         table2.layer.masksToBounds = true
         table2.layer.borderColor = UIColor( red:204/255, green:204/255, blue:204/255, alpha:1.0 ).cgColor
         table2.layer.borderWidth = 2.0
+        table2.allowsSelection=false
         //for table3
         self.table3.delegate=self
         self.table3.dataSource=self
@@ -52,6 +126,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         table3.layer.masksToBounds = true
         table3.layer.borderColor = UIColor( red:204/255, green:204/255, blue:204/255, alpha:1.0 ).cgColor
         table3.layer.borderWidth = 2.0
+        table3.allowsSelection=false
         //for table4
         self.table4.delegate=self
         self.table4.dataSource=self
@@ -59,11 +134,35 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         table4.layer.masksToBounds = true
         table4.layer.borderColor = UIColor( red:204/255, green:204/255, blue:204/255, alpha:1.0 ).cgColor
         table4.layer.borderWidth = 2.0
+        table4.allowsSelection=false
+        //details table
+        self.detailsTable.delegate=self
+        self.detailsTable.dataSource=self
+        detailsTable.layer.masksToBounds = true
+        detailsTable.layer.borderColor = UIColor( red:204/255, green:204/255, blue:204/255, alpha:1.0 ).cgColor
+        detailsTable.layer.borderWidth = 2.0
+        //detailsTable.allowsSelection=false
 //        // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         super.viewWillAppear(animated)
+        //detailsTable.allowsSelection=false
+        if(flagForTimerbeingpausedorstopped==true||flagForTimerbeingpausedorstopped==nil)
+        {
+        table4.allowsSelection=false
+        table3.allowsSelection=false
+        table2.allowsSelection=false
+        table1.allowsSelection=false
+            
+        }
+       else
+        {
+            table4.allowsSelection=true
+            table3.allowsSelection=true
+            table2.allowsSelection=true
+            table1.allowsSelection=true
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,7 +171,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         var num:Int?
-        if(tableView==self.table1||tableView==self.table2||tableView==self.table3||tableView==self.table4)
+        if(tableView==self.table1||tableView==self.table2||tableView==self.table3||tableView==self.table4||tableView==self.detailsTable)
         {
             num=1
         }
@@ -98,40 +197,69 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         {
             count=self.rows4.count
         }
+        if(tableView==self.detailsTable)
+        {
+            count=4
+        }
         return count!
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:UITableViewCell?
+       // var cell:UITableViewCell?
         if tableView==self.table1
         {
-        cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell!.textLabel?.text=self.rows1[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text=self.rows1[indexPath.row]
+            return cell
         }
-        if tableView==self.table2
+        else if tableView==self.table2
         {
-            cell=tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath)
-            cell!.textLabel?.text=self.rows2[indexPath.row]
+           let cell=tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath)
+            cell.textLabel?.text=self.rows2[indexPath.row]
+            return cell
         }
-        if tableView==self.table3
+        else if tableView==self.table3
         {
-            cell=tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath)
-            cell!.textLabel?.text=self.rows3[indexPath.row]
+           let cell=tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath)
+            cell.textLabel?.text=self.rows3[indexPath.row]
+            return cell
         }
-        if tableView==self.table4
+       else if tableView==self.table4
         {
-            cell=tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath)
-            cell!.textLabel?.text=self.rows4[indexPath.row]
+           let cell=tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath)
+            cell.textLabel?.text=self.rows4[indexPath.row]
+            return cell
         }
-        
-        return cell!
+        else if tableView==self.detailsTable
+        {
+//
+            let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
+            cell.Headingstarttimemable.text="Start Time"
+            cell.HeadingEndTimelabel.text="End Time"
+            cell.HeadingLable1.text=self.coloumns[0]
+            cell.Headinglabel2.text=self.coloumns[1]
+            cell.HeadingLable3.text=self.coloumns[2]
+            cell.HeadingLable4.text=self.coloumns[3]
+            
+            return cell
+        }
+        else
+        {
+            let cell=tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath)
+           
+            return cell
+        }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         var height:CGFloat?
         if(tableView==self.table1||tableView==self.table2||tableView==self.table3||tableView==self.table4)
         {
             height=CGFloat(self.heightforHeader)
+        }
+        if(tableView==self.detailsTable)
+        {
+            height=0
         }
         return height!
     }
@@ -144,6 +272,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         //        contetnview.addSubview(header)
         if(tableView==self.table1)
         {
+           // let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
         header.changenameonclick.setTitle("\(coloumns[0])", for: .normal)
         header.delegate=self
         header.headerCellSection=section
@@ -151,6 +280,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table2)
         {
+            //let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
             header.changenameonclick.setTitle("\(coloumns[1])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
@@ -158,6 +288,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table3)
         {
+            //let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
             header.changenameonclick.setTitle("\(coloumns[2])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
@@ -165,11 +296,22 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table4)
         {
+           // let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
             header.changenameonclick.setTitle("\(coloumns[3])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
             header.headerCellTable=4
         }
+//        if(tableView==self.detailsTable)
+//        {
+//            tableView.tableheaderView=nil
+////            let header=Bundle.main.loadNibNamed("ObservationTableViewCellHeader", owner: self, options: nil)?.first as! ObservationTableViewCellHeader
+////            header.header1.text=self.coloumns[0]
+////            header.header2.text=self.coloumns[1]
+////            header.header3.text=self.coloumns[2]
+////            header.header4.text=self.coloumns[3]
+//            
+//        }
         
         return header
     }
@@ -210,6 +352,16 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             if editingStyle == .delete
             {
                 self.rows4.remove(at: indexPath.row)
+                tableView.reloadData()
+            }
+        }
+        if(tableView==self.detailsTable)
+        {
+            if editingStyle == .delete
+            {
+                //remove from dictionary of arrays
+                
+                
                 tableView.reloadData()
             }
         }
