@@ -26,9 +26,31 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     
     @IBOutlet weak var detailsTable: UITableView!
     
-    @IBOutlet weak var htk: UILabel!
-    
-    
+    @IBAction func DoneObservationTaking(_ sender: UIButton) {
+       //save the selected table fields to array od dictionaries.
+       
+        self.noOfTimeDoneClciked = self.noOfTimeDoneClciked+1
+        let endTime=self.timerLabel.text
+        self.selectedData["End Time"]=endTime
+        if(firstTimeDoneClick==true)
+        {
+            
+            self.selectedData["Start Time"]="00:00:00"
+        }
+        else
+        {
+            //print(self.dataObserved[noOfTimeDoneClciked-2]["End Time"])
+            self.selectedData["Start Time"]=self.dataObserved[noOfTimeDoneClciked-2]["End Time"]
+        }
+        dataObserved.append(self.selectedData)
+        self.detailsTable.reloadData()
+        self.selectedData.removeAll()
+        
+        self.firstTimeDoneClick=false
+        print(dataObserved)
+        print(selectedData)
+            }
+  
     
     
     @IBAction func stopTimerAction(_ sender: UIButton) {
@@ -87,6 +109,9 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         
     }
+    var noOfTimeDoneClciked:Int=0
+    var firstTimeDoneClick:Bool=true
+    var navTitle=String()
     var timer:Timer?
     var currenttime=0
    var flagForTimerbeingpausedorstopped:Bool?
@@ -97,6 +122,8 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var heightforHeader=44
     var widthforHeader=335
     var coloumns:[String]=["Errors","Content","Severity Level","Impact on User"]
+    var selectedData=[String:String]()
+    var dataObserved=[[String: String]]()
     
     
     
@@ -146,6 +173,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.navigationItem.title=self.navTitle
         super.viewWillAppear(animated)
         //detailsTable.allowsSelection=false
         if(flagForTimerbeingpausedorstopped==true||flagForTimerbeingpausedorstopped==nil)
@@ -199,7 +227,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.detailsTable)
         {
-            count=4
+            count=self.dataObserved.count
         }
         return count!
     }
@@ -210,6 +238,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         if tableView==self.table1
         {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            //print("row is \(self.rows1[indexPath.row])")
         cell.textLabel?.text=self.rows1[indexPath.row]
             return cell
         }
@@ -233,6 +262,9 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         else if tableView==self.detailsTable
         {
+            print(indexPath.row)
+            if(self.noOfTimeDoneClciked>0)
+            {
 //
             let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
             cell.Headingstarttimemable.text="Start Time"
@@ -241,8 +273,24 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             cell.Headinglabel2.text=self.coloumns[1]
             cell.HeadingLable3.text=self.coloumns[2]
             cell.HeadingLable4.text=self.coloumns[3]
-            
+            cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]!
+                print(self.dataObserved[indexPath.row]["Start Time"]!)
+            cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]!
+                print(self.dataObserved[indexPath.row]["End Time"]!)
+                cell.Lable1.text=self.dataObserved[indexPath.row][coloumns[0]]! as String
+                cell.Lable2.text=self.dataObserved[indexPath.row][coloumns[1]]! as String
+                cell.Lable3.text=self.dataObserved[indexPath.row][coloumns[2]]! as String
+                cell.Lable4.text=self.dataObserved[indexPath.row][coloumns[3]]! as String
+                
             return cell
+            }
+            else
+            {
+                let cell=tableView.dequeueReusableCell(withIdentifier: "detailsCell", for: indexPath)
+                return cell
+            }
+            
+            
         }
         else
         {
@@ -272,7 +320,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         //        contetnview.addSubview(header)
         if(tableView==self.table1)
         {
-           // let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
+           
         header.changenameonclick.setTitle("\(coloumns[0])", for: .normal)
         header.delegate=self
         header.headerCellSection=section
@@ -280,7 +328,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table2)
         {
-            //let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
+            
             header.changenameonclick.setTitle("\(coloumns[1])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
@@ -288,7 +336,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table3)
         {
-            //let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
+            
             header.changenameonclick.setTitle("\(coloumns[2])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
@@ -296,24 +344,60 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         if(tableView==self.table4)
         {
-           // let header=Bundle.main.loadNibNamed("TableViewCellHeader", owner: self, options: nil)?.first as! TableViewCellHeader
+           
             header.changenameonclick.setTitle("\(coloumns[3])", for: .normal)
             header.delegate=self
             header.headerCellSection=section
             header.headerCellTable=4
         }
-//        if(tableView==self.detailsTable)
-//        {
-//            tableView.tableheaderView=nil
-////            let header=Bundle.main.loadNibNamed("ObservationTableViewCellHeader", owner: self, options: nil)?.first as! ObservationTableViewCellHeader
-////            header.header1.text=self.coloumns[0]
-////            header.header2.text=self.coloumns[1]
-////            header.header3.text=self.coloumns[2]
-////            header.header4.text=self.coloumns[3]
-//            
-//        }
         
         return header
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(tableView==self.table1)
+        {
+            
+            let indexPath=tableView.indexPathForSelectedRow
+            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+            
+            self.selectedData["\(self.coloumns[0])"] =  (currentCell.textLabel?.text!)! as String
+            print("selected dat is \(selectedData)")
+        }
+        else if (tableView==self.table2)
+        {
+           
+            let indexPath=tableView.indexPathForSelectedRow
+            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+            self.selectedData["\(self.coloumns[1])"] = (currentCell.textLabel?.text!)! as String
+
+
+        }
+        else if (tableView==self.table3)
+        {
+          
+            let indexPath=tableView.indexPathForSelectedRow
+            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+            self.selectedData["\(self.coloumns[2])"] = (currentCell.textLabel?.text!)! as String
+
+        }
+        else if (tableView==self.table4)
+        {
+            
+            let indexPath=tableView.indexPathForSelectedRow
+            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+            self.selectedData["\(self.coloumns[3])"] = (currentCell.textLabel?.text!)! as String
+
+
+        }
+        else
+        {
+         print("not any table")
+        }
+       
+        
+        
+        //selectedData.removeAll()
     }
     
     

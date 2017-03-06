@@ -68,6 +68,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     func tableView(_ CategoriesTable: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         print("User selected table row \(indexPath.row) and item \(categories[indexPath.row])")
+        selectedCategory=categories[indexPath.row]
         let ac = UIAlertController(title: "Title", message: "please choose the observation type", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Customize", style: .default) { (_) in
             //presentViewController(yourSetupController, animated: true, completion: nil)
@@ -76,8 +77,8 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         }
         ac.addAction(okAction)
         let cancelAction = UIAlertAction(title: "Default", style: .default) { (_) in
-            self.performSegue(withIdentifier: "defaultObserverView", sender: self)
-            print("Hello")
+            self.performSegue(withIdentifier: "pageWithTasks", sender: self)
+            //print("Hello")
 //            let storyboardid = UIStoryboard(name: "categoriesBoard1", bundle: nil)
 //            let controller = storyboardid.instantiateViewController(withIdentifier: "observationtakingboard")
 //            self.present(controller, animated: true, completion: nil)
@@ -88,7 +89,15 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         present(ac, animated: true, completion: nil)
         
     }
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "pageWithTasks"
+        {
+            if let destinName=segue.destination as? ViewControllerWithTasksUsabilityStudy
+            {
+               destinName.navTitle=self.selectedCategory
+            }
+        }
+    }
 
     /*
     // MARK: - Navigation
