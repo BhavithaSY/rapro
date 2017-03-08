@@ -23,6 +23,7 @@
 		5AA66CDF1E3D6FBC00777413 /* jj77.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5AA66CDD1E3D6FBC00777413 /* jj77.xcdatamodeld */; };
 		5AA66CE11E3D6FBC00777413 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AA66CE01E3D6FBC00777413 /* Assets.xcassets */; };
 		5AA66CE41E3D6FBC00777413 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AA66CE21E3D6FBC00777413 /* LaunchScreen.storyboard */; };
+		5AFAE8631E6E5AC0000C6AD4 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAE8621E6E5AC0000C6AD4 /* NotesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		5AA66CE01E3D6FBC00777413 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5AA66CE31E3D6FBC00777413 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5AA66CE51E3D6FBC00777413 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5AFAE8621E6E5AC0000C6AD4 /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				5A8D0D6B1E6A69B300F97095 /* ObservationTakingTableViewCell.swift */,
 				5A8D0D6C1E6A69B300F97095 /* ObservationTakingTableViewCell.xib */,
 				5A998B0F1E6B82120047DC6A /* ViewControllerWithTasksUsabilityStudy.swift */,
+				5AFAE8621E6E5AC0000C6AD4 /* NotesViewController.swift */,
 			);
 			path = jj77;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 				5AA200181E3E8B050059395F /* CoreDataManager.swift in Sources */,
 				5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */,
 				5A234BBA1E5FC22000AAB1EC /* ObservationsViewController.swift in Sources */,
+				5AFAE8631E6E5AC0000C6AD4 /* NotesViewController.swift in Sources */,
 				5A234BBC1E5FC23C00AAB1EC /* CategoriesViewController.swift in Sources */,
 				5A8D0D6D1E6A69B300F97095 /* ObservationTakingTableViewCell.swift in Sources */,
 				5A9C97151E4274C800D12EB2 /* AreaOfIntrestTableViewController.swift in Sources */,

@@ -42,13 +42,27 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             //print(self.dataObserved[noOfTimeDoneClciked-2]["End Time"])
             self.selectedData["Start Time"]=self.dataObserved[noOfTimeDoneClciked-2]["End Time"]
         }
+        
+        //print("columns are:\(self.coloumns)")
+        //print("selected data is\(self.selectedData)")
         dataObserved.append(self.selectedData)
-        self.detailsTable.reloadData()
-        self.selectedData.removeAll()
+        //print("dataobserved is\(self.dataObserved)")
+        //self.detailsTable.reloadData()
+        let indexPath = IndexPath(item: self.noOfTimeDoneClciked-1, section: 0)
+        self.detailsTable.insertRows(at:[indexPath], with: .left)
+
+        for i in 0 ..< self.coloumns.count
+        {
+            self.selectedData[coloumns[i]]=" "
+        }
         
         self.firstTimeDoneClick=false
-        print(dataObserved)
-        print(selectedData)
+        self.table1.deselectRow(at: self.table1selectedrow, animated: true)
+        self.table2.deselectRow(at: self.table2selectedrow, animated: true)
+        self.table3.deselectRow(at: self.table3selectedrow, animated: true)
+        self.table4.deselectRow(at: self.table4selectedrow, animated: true)
+        //print(dataObserved)
+        //print(selectedData)
             }
   
     
@@ -109,6 +123,35 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         
     }
+    
+    
+    
+    @IBAction func noteTaking(_ sender: UIButton) {
+        self.notesIsCLicked=true
+        
+        self.performSegue(withIdentifier: "notes", sender: self)
+        self.notesData["Start Time"]=self.timerLabel.text
+       
+       // self.notesData["Name"]=self.nameOFNotes
+        
+        
+        
+    }
+    
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier=="notes")
+        {
+            let destin=segue.destination as! NotesViewController
+            destin.navTitle=self.navTitle
+        }
+    }
+    var notesContent=String()
+    var noteseditingendedtime=String()
+    var notesIsCLicked:Bool=false
+    var notesData=[String:String]()
+    var nameOFNotes=String()
     var noOfTimeDoneClciked:Int=0
     var firstTimeDoneClick:Bool=true
     var navTitle=String()
@@ -124,11 +167,24 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var coloumns:[String]=["Errors","Content","Severity Level","Impact on User"]
     var selectedData=[String:String]()
     var dataObserved=[[String: String]]()
-    
+    var table1selectedrow=IndexPath()
+    var table2selectedrow=IndexPath()
+    var table3selectedrow=IndexPath()
+    var table4selectedrow=IndexPath()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for i in 0 ..< self.coloumns.count
+        {
+            self.selectedData[coloumns[i]]=" "
+        }
+        self.notesData["Start Time"]="00:00:00"
+        self.notesData["name OF Notes"]=" "
+        self.notesData["Content OF Notes"]=" "
+        self.selectedData["Category"]=self.navTitle
+       // print("in view\(self.selectedData)")
         self.startTimerButton.setImage(UIImage(named : "Play Filled-50"), for: .normal)
         //for table 1
         self.table1.delegate=self
@@ -174,6 +230,12 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.navigationItem.title=self.navTitle
+        if(notesIsCLicked==true)
+        {
+        self.noteseditingendedtime=self.timerLabel.text!
+        self.notesData["End Time"]=self.noteseditingendedtime
+         self.dataObserved.append(self.notesData)
+        }
         super.viewWillAppear(animated)
         //detailsTable.allowsSelection=false
         if(flagForTimerbeingpausedorstopped==true||flagForTimerbeingpausedorstopped==nil)
@@ -191,6 +253,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             table2.allowsSelection=true
             table1.allowsSelection=true
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -262,10 +325,15 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         else if tableView==self.detailsTable
         {
-            print(indexPath.row)
+            print("index pat is\(indexPath.row)")
+            
+//            if(self.notesIsCLicked==false)
+//            {
+            
             if(self.noOfTimeDoneClciked>0)
             {
-//
+                
+
             let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
             cell.Headingstarttimemable.text="Start Time"
             cell.HeadingEndTimelabel.text="End Time"
@@ -273,23 +341,50 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             cell.Headinglabel2.text=self.coloumns[1]
             cell.HeadingLable3.text=self.coloumns[2]
             cell.HeadingLable4.text=self.coloumns[3]
+                
+            print("column is \(self.coloumns[3])")
+             print("Heading is\(cell.HeadingLable4.text)")
             cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]!
-                print(self.dataObserved[indexPath.row]["Start Time"]!)
+               // print(self.dataObserved[indexPath.row]["Start Time"]!)
             cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]!
-                print(self.dataObserved[indexPath.row]["End Time"]!)
+               // print(self.dataObserved[indexPath.row]["End Time"]!)
                 cell.Lable1.text=self.dataObserved[indexPath.row][coloumns[0]]! as String
                 cell.Lable2.text=self.dataObserved[indexPath.row][coloumns[1]]! as String
                 cell.Lable3.text=self.dataObserved[indexPath.row][coloumns[2]]! as String
+                print("column ata dadt\(coloumns[3])")
                 cell.Lable4.text=self.dataObserved[indexPath.row][coloumns[3]]! as String
                 
             return cell
+                
+                
+                
             }
             else
             {
                 let cell=tableView.dequeueReusableCell(withIdentifier: "detailsCell", for: indexPath)
                 return cell
             }
-            
+           // }
+//            else
+//            {
+//                let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
+//                cell.Headingstarttimemable.text="Start Time"
+//                cell.HeadingEndTimelabel.text="End Time"
+//                cell.HeadingLable1.text="Name of Notes"
+//                cell.Headinglabel2.isHidden=true
+//                cell.HeadingLable3.isHidden=true
+//                cell.HeadingLable4.isHidden=true
+//                cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]
+//                cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]
+//                cell.Lable1.text=self.dataObserved[indexPath.row]["Name"]
+//                cell.Lable2.isHidden=true
+//                cell.Lable3.isHidden=true
+//                cell.Lable4.isHidden=true
+//                return cell
+//                
+//                
+//                
+//            }
             
         }
         else
@@ -357,16 +452,21 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(tableView==self.table1)
         {
+            self.table1selectedrow=indexPath
+            //print(<#T##items: Any...##Any#>)
             
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
             
             self.selectedData["\(self.coloumns[0])"] =  (currentCell.textLabel?.text!)! as String
-            print("selected dat is \(selectedData)")
+            //print("selected dat is \(selectedData)")
+//            tableView.deselectRow(at: indexPath!, animated: true)
         }
         else if (tableView==self.table2)
         {
            
+            self.table2selectedrow=indexPath
+
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
             self.selectedData["\(self.coloumns[1])"] = (currentCell.textLabel?.text!)! as String
@@ -375,6 +475,8 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         else if (tableView==self.table3)
         {
+            self.table3selectedrow=indexPath
+
           
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
@@ -383,7 +485,8 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         else if (tableView==self.table4)
         {
-            
+            self.table4selectedrow=indexPath
+
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
             self.selectedData["\(self.coloumns[3])"] = (currentCell.textLabel?.text!)! as String
@@ -584,8 +687,10 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             
             //print(alertTextField?.text)
             changetext=(alertTextField?.text)!
-            print(changetext)
+           // print(changetext)
             self.coloumns[0]=changetext
+            self.selectedData.removeValue(forKey: self.coloumns[0])
+        self.selectedData[self.coloumns[0]]=" "
             self.table1.reloadData()
         }
         alert?.addAction(ok!)
@@ -600,7 +705,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         alert?.addAction(cancel)
         //present on screen
         self.present(alert!,animated:true,completion:nil)
-        print("the text to send: \(changetext)")
+       // print("the text to send: \(changetext)")
         //return changetext
         }
         if(tablenum==2)
@@ -613,8 +718,10 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 
                 //print(alertTextField?.text)
                 changetext=(alertTextField?.text)!
-                print(changetext)
+               // print(changetext)
                 self.coloumns[1]=changetext
+                self.selectedData.removeValue(forKey: self.coloumns[1])
+                self.selectedData[self.coloumns[1]]=" "
                 self.table2.reloadData()
             }
             alert?.addAction(ok!)
@@ -629,7 +736,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             alert?.addAction(cancel)
             //present on screen
             self.present(alert!,animated:true,completion:nil)
-            print("the text to send: \(changetext)")
+           // print("the text to send: \(changetext)")
             //return changetext
         }
 
@@ -643,8 +750,10 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 
                 //print(alertTextField?.text)
                 changetext=(alertTextField?.text)!
-                print(changetext)
+               // print(changetext)
                 self.coloumns[2]=changetext
+                self.selectedData.removeValue(forKey: self.coloumns[2])
+                self.selectedData[self.coloumns[2]]=" "
                 self.table3.reloadData()
             }
             alert?.addAction(ok!)
@@ -659,7 +768,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             alert?.addAction(cancel)
             //present on screen
             self.present(alert!,animated:true,completion:nil)
-            print("the text to send: \(changetext)")
+           // print("the text to send: \(changetext)")
             //return changetext
         }
 
@@ -673,8 +782,11 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 
                 //print(alertTextField?.text)
                 changetext=(alertTextField?.text)!
-                print(changetext)
+                //print(changetext)
+                self.selectedData.removeValue(forKey: self.coloumns[3])
                 self.coloumns[3]=changetext
+                self.selectedData[self.coloumns[3]]=" "
+                print("selcted data after changing \(self.selectedData)")
                 self.table4.reloadData()
             }
             alert?.addAction(ok!)
@@ -689,7 +801,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             alert?.addAction(cancel)
             //present on screen
             self.present(alert!,animated:true,completion:nil)
-            print("the text to send: \(changetext)")
+           // print("the text to send: \(changetext)")
             //return changetext
         }
 
