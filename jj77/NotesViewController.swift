@@ -8,18 +8,27 @@
 
 import UIKit
 
+protocol NotesProtocal {
+//    var nameofNotes : String { get set }
+//    
+//    var contentOfString : String  { get set }
+    func noteDetails(nameOfNote: String,contentOfNote:String)
+}
+
+
 class NotesViewController: UIViewController,UITextViewDelegate {
 
     @IBOutlet weak var notesTextArea: UITextView!
     
     var navTitle=String()
     var nameOfNotes=String()
-    
+    var delegate:NotesProtocal!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.notesTextArea.delegate=self
+        
     
        notesTextArea.text = "Please enter a note here....."
        notesTextArea.textColor = UIColor.darkGray
@@ -28,6 +37,10 @@ class NotesViewController: UIViewController,UITextViewDelegate {
         let rightItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: Selector(("Save")))
         navigationItem.rightBarButtonItem = rightItem
     
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+//        self.delegate.noteDetails(nameOfNote: self.nameOfNotes,contentOfNote: self.notesTextArea.text)
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.title=self.navTitle
@@ -45,6 +58,8 @@ class NotesViewController: UIViewController,UITextViewDelegate {
         let alerttext=alert.textFields?[0]
         self.nameOfNotes=(alerttext?.text)!
         print(self.nameOfNotes)
+      self.delegate.noteDetails(nameOfNote: self.nameOfNotes,contentOfNote: self.notesTextArea.text)
+
         
         
         }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,showAlertOnCLick {
+class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,showAlertOnCLick,NotesProtocal {
     
 
     
@@ -48,7 +48,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         dataObserved.append(self.selectedData)
         //print("dataobserved is\(self.dataObserved)")
         //self.detailsTable.reloadData()
-        let indexPath = IndexPath(item: self.noOfTimeDoneClciked-1, section: 0)
+        let indexPath = IndexPath(item: (self.noOfTimeDoneClciked+self.noOfTimeNotesClicked)-1, section: 0)
         self.detailsTable.insertRows(at:[indexPath], with: .left)
 
         for i in 0 ..< self.coloumns.count
@@ -128,6 +128,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     
     @IBAction func noteTaking(_ sender: UIButton) {
         self.notesIsCLicked=true
+        self.noOfTimeNotesClicked=noOfTimeNotesClicked+1
         
         self.performSegue(withIdentifier: "notes", sender: self)
         self.notesData["Start Time"]=self.timerLabel.text
@@ -144,10 +145,11 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         if(segue.identifier=="notes")
         {
             let destin=segue.destination as! NotesViewController
+            destin.delegate=self
             destin.navTitle=self.navTitle
         }
     }
-    var notesContent=String()
+    var noOfTimeNotesClicked:Int=0
     var noteseditingendedtime=String()
     var notesIsCLicked:Bool=false
     var notesData=[String:String]()
@@ -157,7 +159,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var navTitle=String()
     var timer:Timer?
     var currenttime=0
-   var flagForTimerbeingpausedorstopped:Bool?
+    var flagForTimerbeingpausedorstopped:Bool?
     var rows1:[String]=["Errors of commission","Errors of Omission","Analysis Paralysis","Requesting Information","Error Recovery","User gets stuck","User express frustration"]
     var rows2:[String]=[" "]
     var rows3:[String]=["Low","Medium","Serious","Critical"]
@@ -228,15 +230,20 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
 //        // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.navigationItem.title=self.navTitle
         if(notesIsCLicked==true)
         {
         self.noteseditingendedtime=self.timerLabel.text!
         self.notesData["End Time"]=self.noteseditingendedtime
+        print(notesData)
          self.dataObserved.append(self.notesData)
+            let indexPath = IndexPath(item: (self.noOfTimeDoneClciked+self.noOfTimeNotesClicked)-1, section: 0)
+            self.detailsTable.insertRows(at:[indexPath], with: .left)
+            
         }
-        super.viewWillAppear(animated)
+        
         //detailsTable.allowsSelection=false
         if(flagForTimerbeingpausedorstopped==true||flagForTimerbeingpausedorstopped==nil)
         {
@@ -327,14 +334,21 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         {
             print("index pat is\(indexPath.row)")
             
-//            if(self.notesIsCLicked==false)
-//            {
+            if(self.notesIsCLicked==false)
+            {
             
             if(self.noOfTimeDoneClciked>0)
             {
                 
 
             let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
+                
+            cell.Headinglabel2.isHidden=false
+                cell.HeadingLable3.isHidden=false
+                cell.HeadingLable4.isHidden=false
+                cell.Lable2.isHidden=false
+                cell.Lable3.isHidden=false
+                cell.Lable4.isHidden=false
             cell.Headingstarttimemable.text="Start Time"
             cell.HeadingEndTimelabel.text="End Time"
             cell.HeadingLable1.text=self.coloumns[0]
@@ -364,28 +378,30 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 let cell=tableView.dequeueReusableCell(withIdentifier: "detailsCell", for: indexPath)
                 return cell
             }
-           // }
-//            else
-//            {
-//                let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
-//                cell.Headingstarttimemable.text="Start Time"
-//                cell.HeadingEndTimelabel.text="End Time"
-//                cell.HeadingLable1.text="Name of Notes"
-//                cell.Headinglabel2.isHidden=true
-//                cell.HeadingLable3.isHidden=true
-//                cell.HeadingLable4.isHidden=true
-//                cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]
-//                cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]
-//                cell.Lable1.text=self.dataObserved[indexPath.row]["Name"]
-//                cell.Lable2.isHidden=true
-//                cell.Lable3.isHidden=true
-//                cell.Lable4.isHidden=true
-//                return cell
-//                
-//                
-//                
-//            }
-            
+            }
+            else
+            {
+                let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
+                cell.Headingstarttimemable.text="Start Time"
+                cell.HeadingEndTimelabel.text="End Time"
+                cell.HeadingLable1.text="Name of Notes"
+                cell.Headinglabel2.isHidden=true
+                cell.HeadingLable3.isHidden=true
+                cell.HeadingLable4.isHidden=true
+                cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]
+                cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]
+                cell.Lable1.text=self.dataObserved[indexPath.row]["name OF Notes"]
+                cell.Lable2.isHidden=true
+                cell.Lable3.isHidden=true
+                cell.Lable4.isHidden=true
+                notesIsCLicked=false
+
+                return cell
+                
+                
+                
+            }
+        
         }
         else
         {
@@ -554,6 +570,12 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         
         
+    }
+    func noteDetails(nameOfNote: String,contentOfNote:String)
+    {
+        
+        self.notesData["name OF Notes"]=nameOfNote
+        self.notesData["Content OF Notes"]=contentOfNote
     }
     func showAlertWithText(tableNum:Int)
     {
@@ -808,7 +830,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         
     }
     
-
+    
 
     /*
     // MARK: - Navigation
