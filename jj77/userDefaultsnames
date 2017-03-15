@@ -1,0 +1,4 @@
+1)launchedBefore-bool
+2)UserName-String
+3)Email-String
+4)FirstTimeLogin-int

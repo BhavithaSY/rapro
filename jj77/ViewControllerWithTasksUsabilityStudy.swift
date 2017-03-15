@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewControllerWithTasksUsabilityStudy: UIViewController {
+class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var tableWithTasks: UITableView!
     
@@ -26,16 +26,33 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController {
            if let destination = segue.destination as? ObservationTakingViewController
            {
             destination.navTitle=self.navTitle
+            destination.taskname=self.taskname
             }
         }
     }
     
     
     var navTitle=String()
-    var tasksList=["Level1","Level2","Level3","Level4"]
+    var tasksList=["Task1","Task2","Task3","Task4"]
+    var taskname=String()
     
-    
-    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+       return self.tasksList.count
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+       return 1
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TasksCell", for: indexPath)
+        cell.textLabel?.text=self.tasksList[indexPath.row]
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexPath=tableView.indexPathForSelectedRow
+        let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+        self.taskname=(currentCell.textLabel?.text)!
+
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +60,8 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         self.navigationItem.title=self.navTitle
+        self.tableWithTasks.delegate=self
+        self.tableWithTasks.dataSource=self
 
         // Do any additional setup after loading the view.
     }

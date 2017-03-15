@@ -520,7 +520,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="notesTextArea" destination="HFE-tw-v9w" id="v95-fJ-Blb"/>
-                        <segue destination="GvJ-Bd-2ow" kind="show" identifier="SaveNotesGoBack" id="vlJ-hY-P6b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3pu-iI-4Oc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -539,13 +538,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" alpha="0.84999999999999998" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCE-9s-ewn">
-                                <rect key="frame" x="1271" y="86" width="30" height="30"/>
-                                <state key="normal" title="Button" image="paper-piece-plus-7"/>
-                                <connections>
-                                    <action selector="addnewobservationaction:" destination="Q1J-N9-BZy" eventType="touchUpInside" id="NlL-5A-a6X"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HBM-ze-oLM">
                                 <rect key="frame" x="140" y="185" width="1031" height="544"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -555,12 +547,19 @@
                                         <rect key="frame" x="0.0" y="28" width="1031" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Whw-Tm-Rkr" id="COA-Iq-fCs">
-                                            <rect key="frame" x="0.0" y="0.0" width="1031" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1031" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" alpha="0.84999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCE-9s-ewn">
+                                <rect key="frame" x="1217" y="86" width="84" height="30"/>
+                                <state key="normal" title="Button" image="paper-piece-plus-7"/>
+                                <connections>
+                                    <action selector="addnewobservationaction:" destination="Q1J-N9-BZy" eventType="touchUpInside" id="NlL-5A-a6X"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -643,7 +642,4 @@
         <image name="paper-piece-plus-7" width="30" height="30"/>
         <image name="recorder-7" width="30" height="30"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="vlJ-hY-P6b"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -42,6 +42,23 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //user defaults
+//        let launchedBefore=UserDefaults.standard.bool(forKey: "launchedBefore")
+//        if launchedBefore
+//        {
+//            print("launched before")
+//        }
+//        else
+//        {
+//            UserDefaults.standard.set(true, forKey: "launchedBefore")
+//        }
+//        
+        
+        
+        
+        
+        
+        
         
         //let the device in land scape mode
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
@@ -77,8 +94,8 @@ class ViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
-    }
+       self.navigationController?.isNavigationBarHidden = true
+            }
     
 //let the device open in landscape mode
     private func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -217,29 +234,39 @@ class ViewController: UIViewController {
                             //get json result
                             print("entered do")
                             let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                            print(json)
                             //assign json to new var parsejson in secured way
                             guard let parseJson = json else{
                                 print("error")
                                 return
                             }
-                            //print(parseJson)
+                            print(parseJson)
                             //get name from parseJson dictionary
-                            let username = parseJson["UserName"]
-                            var loginstatus = String(describing: parseJson["flagging"]!)
-                            print(loginstatus)
+                            let username:String = parseJson["UserName"] as! String
+                            let email:String=parseJson["Email"]as! String
+                            let status:String=parseJson["status"] as! String
+                            let firstlogin:String=parseJson["FirstTimeLogin"] as! String
+                            print(firstlogin)
+                            //print("ans from php: \(email)")
+                            //let loginstatus = String(describing: parseJson["flagging"]!)
+                             //print(loginstatus)
                             
                             //if there is some user
-                            if loginstatus == "1"{
+                            if status == "200"{
+                                
                                 self.performSegue(withIdentifier: "loginSegue", sender: self)
+                                UserDefaults.standard.set(username, forKey: "UserName")
+                                UserDefaults.standard.set(email, forKey: "Email")
+                               // UserDefaults.standard.set(firstlogin, forKey: "FirstTimeLogin")
                                 print("entered user name block")
-                                print("username: \(username!)")
+                                print("username: \(username)")
                             }
                             else{
                                 self.dummy.text="please enter valid username and password!!!"
                                 print("entered username is nil block")
                             }
                             
-
+                            
                             
                         }catch
                         {
@@ -250,8 +277,8 @@ class ViewController: UIViewController {
                         print("response string = \(responseString!)")
                         
                     })
-
-                   
+                    
+                    
                 }
                 else
                 {
@@ -262,13 +289,13 @@ class ViewController: UIViewController {
                 }
             }//task closing
             task.resume()
-
+            
             
         }
         else if(usernameLogin.text == "" && passwordLogin.text != "")
         {
             //username can not be empty
-           usernameLogin.attributedPlaceholder=NSAttributedString(string: "userName can not be empty", attributes: [NSForegroundColorAttributeName:UIColor.red])
+            usernameLogin.attributedPlaceholder=NSAttributedString(string: "userName can not be empty", attributes: [NSForegroundColorAttributeName:UIColor.red])
         }
         else
         {
@@ -277,19 +304,19 @@ class ViewController: UIViewController {
         }
         
         
-       //core data code
-//      let res = CoreDataManager.loginreq(username: self.usernameLogin.text!, password: self.passwordLogin.text!)
-//        print(res)
-//        if(res == true)
-//        {
-//            dummy.text="successful login"
-//            self.performSegue(withIdentifier: "loginSegue", sender: self)
-//            
-//        }
-//        else
-//        {
-//            dummy.text="Login failed"
-//        }
+        //core data code
+        //      let res = CoreDataManager.loginreq(username: self.usernameLogin.text!, password: self.passwordLogin.text!)
+        //        print(res)
+        //        if(res == true)
+        //        {
+        //            dummy.text="successful login"
+        //            self.performSegue(withIdentifier: "loginSegue", sender: self)
+        //
+        //        }
+        //        else
+        //        {
+        //            dummy.text="Login failed"
+        //        }
         
         
         

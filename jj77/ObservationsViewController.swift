@@ -20,9 +20,16 @@ class ObservationsViewController: UIViewController {
         
     }
     
+  
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.navigationItem.setHidesBackButton(true, animated: true)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(UserDefaults.standard.string(forKey: "UserName")!)", style: .plain, target: self, action: #selector(nameTapped))
+        
+
     }
 
     
@@ -30,10 +37,26 @@ class ObservationsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.navigationItem.setHidesBackButton(true, animated: true)
+        let right = UIBarButtonItem(title: "\(UserDefaults.standard.string(forKey: "UserName")!)", style: .plain, target: self, action: #selector(nameTapped))
+        self.tabBarController?.navigationItem.setRightBarButton(right, animated: true)
+        self.navigationController?.title="Observations"
+       
+        
+        
+        
 
         // Do any additional setup after loading the view.
     }
 
+    func nameTapped()
+    {
+        tabBarController?.selectedIndex=2
+    }
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

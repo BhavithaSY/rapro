@@ -32,6 +32,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         self.noOfTimeDoneClciked = self.noOfTimeDoneClciked+1
         let endTime=self.timerLabel.text
         self.selectedData["End Time"]=endTime
+        self.selectedData["Task Name"]=self.taskname
         if(firstTimeDoneClick==true)
         {
             
@@ -46,11 +47,11 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         //print("columns are:\(self.coloumns)")
         //print("selected data is\(self.selectedData)")
         dataObserved.append(self.selectedData)
-        //print("dataobserved is\(self.dataObserved)")
+        print("dataobserved is\(self.dataObserved)")
         //self.detailsTable.reloadData()
         let indexPath = IndexPath(item: (self.noOfTimeDoneClciked+self.noOfTimeNotesClicked)-1, section: 0)
-        self.detailsTable.insertRows(at:[indexPath], with: .left)
-
+        self.detailsTable.insertRows(at:[indexPath], with: .fade)
+        
         for i in 0 ..< self.coloumns.count
         {
             self.selectedData[coloumns[i]]=" "
@@ -149,6 +150,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             destin.navTitle=self.navTitle
         }
     }
+    var taskname=String()
     var noOfTimeNotesClicked:Int=0
     var noteseditingendedtime=String()
     var notesIsCLicked:Bool=false
@@ -469,7 +471,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         if(tableView==self.table1)
         {
             self.table1selectedrow=indexPath
-            //print(<#T##items: Any...##Any#>)
+            
             
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
