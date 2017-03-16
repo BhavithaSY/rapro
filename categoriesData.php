@@ -27,12 +27,18 @@ $result = $access->categoriesdata($email,$firstLogin);
 if($firstLogin==1)
 {
 	//echo "enterdGGGGG";
-$result1 = $access->updateloginstatus($email,$firstLogin);
+$access->updateloginstatus($email,$firstLogin);
 
 }
 if($result)
 {
-$returnArray=$result;
+$num=count($result);
+//echo "$num";
+for ($i = 0; $i < $num; $i++)
+{
+	
+$returnArray[$i]=$result[$i];
+}
 echo json_encode($returnArray);
 } 
 else
@@ -43,33 +49,33 @@ else
 }
 
 //echo "Result is $result";
-if($result1)
-{
-	//$user = $access->selectUser($username);
-//echo json_encode($user);
-	//$returnArray["status"] = "200";
+// if($result1)
+// {
+// 	//$user = $access->selectUser($username);
+// //echo json_encode($user);
+// 	//$returnArray["status"] = "200";
 
-	$returnArray1=$result1;
-	// $returnArray["Cid"] = $result["CID"];
-	// $returnArray["Cname"] = $result["CName"];
-	// $returnArray["Csubtitle"] = $result["Csubtitle"];
+// 	$returnArray1=$result1;
+// 	// $returnArray["Cid"] = $result["CID"];
+// 	// $returnArray["Cname"] = $result["CName"];
+// 	// $returnArray["Csubtitle"] = $result["Csubtitle"];
 	
 	
 	
 	
-//echo "The user ino is $returnArray";
-	//STEP-5 json data printing
-	echo "$returnArray1";
-echo json_encode($returnArray1);
-}
-else
-{
-	//$returnArray["status"] = "400";
-	$returnArray1["flagging"]="0";
-	$returnArray1["Message"] = "No such user Exists";
-	echo json_encode($returnArray1);
+// //echo "The user ino is $returnArray";
+// 	//STEP-5 json data printing
+// 	echo "$returnArray1";
+// echo json_encode($returnArray1);
+// }
+// else
+// {
+// 	//$returnArray["status"] = "400";
+// 	$returnArray1["flagging"]="0";
+// 	$returnArray1["Message"] = "No such user Exists";
+// 	echo json_encode($returnArray1);
 	
-}
+// }
 
 //STEP-4 close connection
 
