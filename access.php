@@ -27,7 +27,7 @@
                 //echo "could not connect to database";
             }else
             {
-                //echo "Connected";
+               // echo "Connected";
             }
             //support all languages
             $this->conn->set_charset("utf8");
@@ -107,5 +107,90 @@
            // echo "The array is $returnArray";
             return $returnArray;
         }
+public function categoriesdata($email,$firstlogin)
+        {
+            //echo "entered";
+            $categories=array();
+         if($firstlogin == 1)
+             {
+               // echo " is 1";
+                $sql = "SELECT * FROM CategoriesDefault";
+            //echo"$sql";
+                if ($this->conn != null)
+                { 
+                    //echo "not null";
+                    $result = $this->conn->query($sql);
+                }
+                else
+                {
+                    echo "is null";
+                }
+            
+            //echo "$result";
+            }
+            else
+            {
+                //echo "is 0";
+                $sql = "SELECT * FROM Categories WHERE email='". $email."'";
+               if ($this->conn != null)
+                { 
+                    //echo "not null";
+                    $result = $this->conn->query($sql);
+                }
+                else
+                {
+                    echo "is null";
+                }
+                //echo "$result";
+            }
+            //echo "passes";
+            //echo"$sql";
+            
+
+            if ($result != null && (mysqli_num_rows($result) > 0))
+            {
+                //echo "entered if of select user";
+               // $row = $result->fetch_array(MYSQLI_ASSOC);
+                //echo "entered if";
+                while($row=$result->fetch_assoc())
+            {
+                //echo "row is $row";
+
+                array_push($categories,$row);
+            }
+     
+                if (!empty($categories))
+                {
+                   // echo "entered not empty of select ser and the row is $row";
+                    $returnArray = $categories;
+                }
+            }
+            else
+            {
+                //echo "enterd null";
+            }
+            //echo json_encode($categories);
+          // echo "\n The array is $categories";
+            return $returnArray;
+        }
+
+public function updateloginstatus($email,$firstlogin)
+        {
+            //echo"enterd update";
+            
+                $sql = "UPDATE users SET firstTimeLogin = 2 WHERE email='". $email."'";
+                $result = $this->conn->query($sql);
+                $statement = $this->conn->prepare($sql);
+
+                if(!$statement)
+                {
+                    throw new Exception($statement->error);
+                }
+                $returnValue = $statement->execute();
+            //echo"return is $returnValue.  ";
+                //return $returnValue;
+        }
+
+
     }
     ?>

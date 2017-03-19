@@ -32,13 +32,17 @@ $access->updateloginstatus($email,$firstLogin);
 }
 if($result)
 {
+	//echo "res is  $result[0]";
 $num=count($result);
 //echo "$num";
 for ($i = 0; $i < $num; $i++)
 {
 	
 $returnArray[$i]=$result[$i];
-}
+	}
+// $returnArray["cid"]=$result["CID"];
+// $returnArray["cname"]=$result["CName"];
+// $returnArray["csub"]=$result["Csubtitle"];
 echo json_encode($returnArray);
 } 
 else
