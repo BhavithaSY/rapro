@@ -257,7 +257,7 @@ class ViewController: UIViewController {
                                 self.performSegue(withIdentifier: "loginSegue", sender: self)
                                 UserDefaults.standard.set(username, forKey: "UserName")
                                 UserDefaults.standard.set(email, forKey: "Email")
-                               // UserDefaults.standard.set(firstlogin, forKey: "FirstTimeLogin")
+                                UserDefaults.standard.set(firstlogin, forKey: "FirstTimeLogin")
                                 print("entered user name block")
                                 print("username: \(username)")
                             }

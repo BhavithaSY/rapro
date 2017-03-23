@@ -30,19 +30,19 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
        //save the selected table fields to array od dictionaries.
        
         self.noOfTimeDoneClciked = self.noOfTimeDoneClciked+1
-        let endTime=self.timerLabel.text
-        self.selectedData["End Time"]=endTime
+        //let endTime=self.timerLabel.text
+        self.selectedData["End Time"]=" "
         self.selectedData["Task Name"]=self.taskname
-        if(firstTimeDoneClick==true)
-        {
-            
-            self.selectedData["Start Time"]="00:00:00"
-        }
-        else
-        {
-            //print(self.dataObserved[noOfTimeDoneClciked-2]["End Time"])
-            self.selectedData["Start Time"]=self.dataObserved[noOfTimeDoneClciked-2]["End Time"]
-        }
+//        if(firstTimeDoneClick==true)
+//        {
+//            
+//            self.selectedData["Start Time"]="00:00:00"
+//        }
+//        else
+//        {
+//            //print(self.dataObserved[noOfTimeDoneClciked-2]["End Time"])
+//            self.selectedData["Start Time"]=self.dataObserved[noOfTimeDoneClciked-2]["End Time"]
+//        }
         
         //print("columns are:\(self.coloumns)")
         //print("selected data is\(self.selectedData)")
@@ -175,6 +175,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var table2selectedrow=IndexPath()
     var table3selectedrow=IndexPath()
     var table4selectedrow=IndexPath()
+    var detailsTabSelectedRow=IndexPath()
     
     
     override func viewDidLoad() {
@@ -471,7 +472,9 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         if(tableView==self.table1)
         {
             self.table1selectedrow=indexPath
-            
+            //capture the current time and set it as the start time of the event
+            let startTime=self.timerLabel.text
+            self.selectedData["Start Time"]=startTime
             
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
@@ -511,9 +514,14 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
 
 
         }
-        else
+        else if (tableView==self.detailsTable)
         {
-         print("not any table")
+            self.detailsTabSelectedRow=indexPath
+            let indexPath=tableView.indexPathForSelectedRow
+            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+            self.dataObserved[(indexPath?.row)!]["End Time"]=self.timerLabel.text
+            self.detailsTable.reloadRows(at: [indexPath!] , with: .fade)
+         //print("not any table")
         }
        
         
