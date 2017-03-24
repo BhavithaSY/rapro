@@ -176,6 +176,9 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var table3selectedrow=IndexPath()
     var table4selectedrow=IndexPath()
     var detailsTabSelectedRow=IndexPath()
+    var detailstableindexforcolor:[IndexPath]=[]
+    var coloringflag=Bool()
+
     
     
     override func viewDidLoad() {
@@ -361,6 +364,8 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 
             print("column is \(self.coloumns[3])")
              print("Heading is\(cell.HeadingLable4.text)")
+                let countofdataobs=self.dataObserved.count
+                print("count is \(countofdataobs)")
             cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]!
                // print(self.dataObserved[indexPath.row]["Start Time"]!)
             cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]!
@@ -370,7 +375,30 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 cell.Lable3.text=self.dataObserved[indexPath.row][coloumns[2]]! as String
                 print("column ata dadt\(coloumns[3])")
                 cell.Lable4.text=self.dataObserved[indexPath.row][coloumns[3]]! as String
-                
+//                if(indexPath.row==0)
+//                {
+//                    cell.StartTimeLable.text=self.dataObserved[(countofdataobs-1)]["Start Time"]!
+//                    // print(self.dataObserved[indexPath.row]["Start Time"]!)
+//                    cell.EndTimeLable.text=self.dataObserved[(countofdataobs-1)]["End Time"]!
+//                    // print(self.dataObserved[indexPath.row]["End Time"]!)
+//                    cell.Lable1.text=self.dataObserved[(countofdataobs-1)][coloumns[0]]! as String
+//                    cell.Lable2.text=self.dataObserved[(countofdataobs-1)][coloumns[1]]! as String
+//                    cell.Lable3.text=self.dataObserved[(countofdataobs-1)][coloumns[2]]! as String
+//                    print("column ata dadt\(coloumns[3])")
+//                    cell.Lable4.text=self.dataObserved[(countofdataobs-1)][coloumns[3]]! as String
+//                }
+//                else
+//                {
+//                cell.StartTimeLable.text=self.dataObserved[countofdataobs-(indexPath.row+1)]["Start Time"]!
+//                // print(self.dataObserved[indexPath.row]["Start Time"]!)
+//                cell.EndTimeLable.text=self.dataObserved[countofdataobs-(indexPath.row+1)]["End Time"]!
+//                // print(self.dataObserved[indexPath.row]["End Time"]!)
+//                cell.Lable1.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[0]]! as String
+//                cell.Lable2.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[1]]! as String
+//                cell.Lable3.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[2]]! as String
+//                print("column ata dadt\(coloumns[3])")
+//                cell.Lable4.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[3]]! as String
+//                }
             return cell
                 
                 
@@ -385,6 +413,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             else
             {
                 let cell=Bundle.main.loadNibNamed("ObservationTakingTableViewCell", owner: self, options: nil)?.first as! ObservationTakingTableViewCell
+                let contdaobs=self.dataObserved.count
                 cell.Headingstarttimemable.text="Start Time"
                 cell.HeadingEndTimelabel.text="End Time"
                 cell.HeadingLable1.text="Name of Notes"
@@ -394,6 +423,10 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 cell.StartTimeLable.text=self.dataObserved[indexPath.row]["Start Time"]
                 cell.EndTimeLable.text=self.dataObserved[indexPath.row]["End Time"]
                 cell.Lable1.text=self.dataObserved[indexPath.row]["name OF Notes"]
+                //cell.StartTimeLable.text=self.dataObserved[contdaobs-indexPath.row]["Start Time"]
+//                cell.EndTimeLable.text=self.dataObserved[contdaobs-indexPath.row]["End Time"]
+//                cell.Lable1.text=self.dataObserved[contdaobs-indexPath.row]["name OF Notes"]
+
                 cell.Lable2.isHidden=true
                 cell.Lable3.isHidden=true
                 cell.Lable4.isHidden=true
@@ -516,11 +549,65 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         else if (tableView==self.detailsTable)
         {
+            var j=0
             self.detailsTabSelectedRow=indexPath
             let indexPath=tableView.indexPathForSelectedRow
             let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
-            self.dataObserved[(indexPath?.row)!]["End Time"]=self.timerLabel.text
-            self.detailsTable.reloadRows(at: [indexPath!] , with: .fade)
+            
+            if(!(self.detailstableindexforcolor.isEmpty))
+            {
+            for item in self.detailstableindexforcolor
+            {
+               j=j+1
+                print(item)
+                if(indexPath != item)
+                {
+                    if(self.detailstableindexforcolor.count>1 && j<self.detailstableindexforcolor.count)
+                    {
+                        continue
+                    }
+                    else
+                    {
+                    self.detailstableindexforcolor.append(indexPath!)
+
+//                    self.detailsTabSelectedRow=indexPath
+//                    let indexPath=tableView.indexPathForSelectedRow
+//                    let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+                    self.dataObserved[(indexPath?.row)!]["End Time"]=self.timerLabel.text
+                    print(self.detailsTabSelectedRow)
+                    print("colore inde \(self.detailstableindexforcolor)")
+                        self.coloringflag=true
+                    self.detailsTable.reloadRows(at: [indexPath!] , with: .fade)
+                    //currentCell.backgroundColor=UIColor.red
+                        self.coloringflag=false
+                    }
+                }
+                else
+                {
+//                    let indexPath=tableView.indexPathForSelectedRow
+//                    let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+                    currentCell.isUserInteractionEnabled=false
+                    currentCell.selectionStyle = .none
+                    break
+
+                }
+            }
+            }
+            else
+            {
+                self.detailstableindexforcolor.append(indexPath!)
+//                
+//                self.detailsTabSelectedRow=indexPath
+//                let indexPath=tableView.indexPathForSelectedRow
+//                let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+                self.dataObserved[(indexPath?.row)!]["End Time"]=self.timerLabel.text
+                print(self.detailsTabSelectedRow)
+                print("colore inde \(self.detailstableindexforcolor)")
+                self.coloringflag=true
+                self.detailsTable.reloadRows(at: [indexPath!] , with: .fade)
+                self.coloringflag=false
+                //currentCell.backgroundColor=UIColor.red
+            }
          //print("not any table")
         }
        
@@ -529,7 +616,23 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         //selectedData.removeAll()
     }
     
-    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if(tableView==self.detailsTable)
+        {
+            if(self.coloringflag==false)
+            {
+//            self.detailsTabSelectedRow=indexPath
+//            let indexPath=tableView.indexPathForSelectedRow
+//            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
+
+            cell.backgroundColor=UIColor.green
+            }
+            else if(self.coloringflag==true)
+            {
+                cell.backgroundColor=UIColor.red
+            }
+        }
+    }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(tableView==self.table1)
         {
