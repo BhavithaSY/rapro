@@ -28,7 +28,9 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.navigationItem.title="CATEGORIES"
+        self.tabBarController?.navigationItem.setHidesBackButton(true, animated: true)
         CategoriesTable.delegate = self
         CategoriesTable.dataSource = self
         CategoriesTable.reloadData()
@@ -36,6 +38,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         // Do any additional setup after loading the view.
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -45,7 +48,9 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         
             super.viewWillAppear(animated)
-            self.navigationController?.isNavigationBarHidden = true
+            self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.navigationItem.title="CATEGORIES"
+        self.tabBarController?.navigationItem.setHidesBackButton(true, animated: true)
         email=UserDefaults.standard.string(forKey: "Email")!
         firstTimeLogin=UserDefaults.standard.integer(forKey: "FirstTimeLogin")
         //print(email)

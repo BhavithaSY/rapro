@@ -241,19 +241,20 @@ class ViewController: UIViewController {
                                 return
                             }
                             print(parseJson)
-                            //get name from parseJson dictionary
-                            let username:String = parseJson["UserName"] as! String
-                            let email:String=parseJson["Email"]as! String
                             let status:String=parseJson["status"] as! String
-                            let firstlogin:String=parseJson["FirstTimeLogin"] as! String
-                            print(firstlogin)
-                            //print("ans from php: \(email)")
+                            //get name from parseJson dictionary
+                                                        //print("ans from php: \(email)")
                             //let loginstatus = String(describing: parseJson["flagging"]!)
                              //print(loginstatus)
                             
                             //if there is some user
                             if status == "200"{
+                                let username:String = parseJson["UserName"] as! String
+                                let email:String=parseJson["Email"]as! String
                                 
+                                let firstlogin:String=parseJson["FirstTimeLogin"] as! String
+                                print(firstlogin)
+
                                 self.performSegue(withIdentifier: "loginSegue", sender: self)
                                 UserDefaults.standard.set(username, forKey: "UserName")
                                 UserDefaults.standard.set(email, forKey: "Email")

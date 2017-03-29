@@ -20,6 +20,13 @@ class SetttingsViewController: UIViewController {
     
     
     @IBAction func logoutAction(_ sender: UIButton) {
+        if let bundle = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundle)
+        }
+        
+        performSegue(withIdentifier: "loggingOut", sender: self)
+        
+        
     }
     
     
@@ -35,7 +42,8 @@ class SetttingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-self.navigationItem.title="SETTINGS"
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.navigationItem.title="SETTINGS"
         // Do any additional setup after loading the view.
     }
 

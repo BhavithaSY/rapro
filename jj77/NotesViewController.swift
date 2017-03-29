@@ -59,8 +59,9 @@ class NotesViewController: UIViewController,UITextViewDelegate {
         self.nameOfNotes=(alerttext?.text)!
         print(self.nameOfNotes)
       self.delegate.noteDetails(nameOfNote: self.nameOfNotes,contentOfNote: self.notesTextArea.text)
-
-        
+_ = self.navigationController?.popViewController(animated: true)
+        //self.dismiss(animated: true, completion: nil)
+      //  self.performSegue(withIdentifier: "showBack", sender: self)
         
         }
         alert.addAction(ok)

@@ -128,6 +128,8 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     
     
     @IBAction func noteTaking(_ sender: UIButton) {
+        if !flagForTimerbeingpausedorstopped
+        {
         self.notesIsCLicked=true
         self.noOfTimeNotesClicked=noOfTimeNotesClicked+1
         
@@ -136,7 +138,22 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
        
        // self.notesData["Name"]=self.nameOFNotes
         
-        
+        }
+        else
+        {
+            let alert:UIAlertController=UIAlertController(title:"Timer Not started",message:"Please start the timer",preferredStyle:.alert)
+            
+            let ok=UIAlertAction(title:"OK",style:UIAlertActionStyle.default){(_) in
+                
+                
+                //self.dismiss(animated: true, completion: nil)
+                
+            }
+            alert.addAction(ok)
+            
+            //present on screen
+            self.present(alert,animated:true,completion:nil)
+        }
         
     }
     
@@ -161,7 +178,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var navTitle=String()
     var timer:Timer?
     var currenttime=0
-    var flagForTimerbeingpausedorstopped:Bool?
+    var flagForTimerbeingpausedorstopped=true
     var rows1:[String]=["Errors of commission","Errors of Omission","Analysis Paralysis","Requesting Information","Error Recovery","User gets stuck","User express frustration"]
     var rows2:[String]=[" "]
     var rows3:[String]=["Low","Medium","Serious","Critical"]
@@ -375,31 +392,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 cell.Lable3.text=self.dataObserved[indexPath.row][coloumns[2]]! as String
                 print("column ata dadt\(coloumns[3])")
                 cell.Lable4.text=self.dataObserved[indexPath.row][coloumns[3]]! as String
-//                if(indexPath.row==0)
-//                {
-//                    cell.StartTimeLable.text=self.dataObserved[(countofdataobs-1)]["Start Time"]!
-//                    // print(self.dataObserved[indexPath.row]["Start Time"]!)
-//                    cell.EndTimeLable.text=self.dataObserved[(countofdataobs-1)]["End Time"]!
-//                    // print(self.dataObserved[indexPath.row]["End Time"]!)
-//                    cell.Lable1.text=self.dataObserved[(countofdataobs-1)][coloumns[0]]! as String
-//                    cell.Lable2.text=self.dataObserved[(countofdataobs-1)][coloumns[1]]! as String
-//                    cell.Lable3.text=self.dataObserved[(countofdataobs-1)][coloumns[2]]! as String
-//                    print("column ata dadt\(coloumns[3])")
-//                    cell.Lable4.text=self.dataObserved[(countofdataobs-1)][coloumns[3]]! as String
-//                }
-//                else
-//                {
-//                cell.StartTimeLable.text=self.dataObserved[countofdataobs-(indexPath.row+1)]["Start Time"]!
-//                // print(self.dataObserved[indexPath.row]["Start Time"]!)
-//                cell.EndTimeLable.text=self.dataObserved[countofdataobs-(indexPath.row+1)]["End Time"]!
-//                // print(self.dataObserved[indexPath.row]["End Time"]!)
-//                cell.Lable1.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[0]]! as String
-//                cell.Lable2.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[1]]! as String
-//                cell.Lable3.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[2]]! as String
-//                print("column ata dadt\(coloumns[3])")
-//                cell.Lable4.text=self.dataObserved[countofdataobs-(indexPath.row+1)][coloumns[3]]! as String
-//                }
-            return cell
+                           return cell
                 
                 
                 
@@ -426,11 +419,14 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
                 //cell.StartTimeLable.text=self.dataObserved[contdaobs-indexPath.row]["Start Time"]
 //                cell.EndTimeLable.text=self.dataObserved[contdaobs-indexPath.row]["End Time"]
 //                cell.Lable1.text=self.dataObserved[contdaobs-indexPath.row]["name OF Notes"]
-
+                cell.backgroundColor=UIColor.init(red: 255, green: 255, blue: 0, alpha: 0.3)
                 cell.Lable2.isHidden=true
                 cell.Lable3.isHidden=true
                 cell.Lable4.isHidden=true
-                notesIsCLicked=false
+//                notesIsCLicked=false
+                cell.isUserInteractionEnabled=false
+                cell.selectionStyle = .none
+                
 
                 return cell
                 
@@ -619,18 +615,25 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if(tableView==self.detailsTable)
         {
-            if(self.coloringflag==false)
+            if(self.coloringflag==false&&notesIsCLicked==false)
             {
 //            self.detailsTabSelectedRow=indexPath
 //            let indexPath=tableView.indexPathForSelectedRow
 //            let currentCell=tableView.cellForRow(at: indexPath!)! as UITableViewCell
 
-            cell.backgroundColor=UIColor.green
+            cell.backgroundColor=UIColor.init(red: 0, green: 255, blue: 0, alpha: 0.3)
+            }
+                else if (self.coloringflag==false&&notesIsCLicked==true)
+            {
+                cell.backgroundColor=UIColor.init(red: 255, green: 255, blue: 0, alpha: 0.3)
+                notesIsCLicked=false
+
             }
             else if(self.coloringflag==true)
             {
-                cell.backgroundColor=UIColor.red
+                cell.backgroundColor=UIColor.init(red: 255, green: 0, blue: 0, alpha: 0.3)
             }
+            
         }
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

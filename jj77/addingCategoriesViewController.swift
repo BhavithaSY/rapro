@@ -114,9 +114,16 @@ class addingCategoriesViewController: UIViewController {
                         else if status == "200"{
                             
                             let alert:UIAlertController=UIAlertController(title:"ADDED",message:"Category successfully added",preferredStyle:.alert)
-                            let ok=UIAlertAction(title:"OK",style:UIAlertActionStyle.cancel,handler:nil)
+                            
+                            let ok=UIAlertAction(title:"OK",style:UIAlertActionStyle.default){(_) in
+                                
+                                
+                                self.dismiss(animated: true, completion: nil)
+                                
+                            }
                             alert.addAction(ok)
-                            //present on screen
+
+                         //present on screen
                             self.present(alert,animated:true,completion:nil)
                             //self.performSegue(withIdentifier: "loginSegue", sender: self)
                            // UserDefaults.standard.set(username, forKey: "UserName")
