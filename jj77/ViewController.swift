@@ -259,6 +259,8 @@ class ViewController: UIViewController {
                                 UserDefaults.standard.set(username, forKey: "UserName")
                                 UserDefaults.standard.set(email, forKey: "Email")
                                 UserDefaults.standard.set(firstlogin, forKey: "FirstTimeLogin")
+                                UserDefaults.standard.set(2, forKey: "addedcategory")
+                                
                                 print("entered user name block")
                                 print("username: \(username)")
                             }

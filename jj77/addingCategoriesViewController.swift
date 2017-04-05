@@ -122,7 +122,7 @@ class addingCategoriesViewController: UIViewController {
                                 
                             }
                             alert.addAction(ok)
-
+UserDefaults.standard.set(1, forKey: "addedcategory")
                          //present on screen
                             self.present(alert,animated:true,completion:nil)
                             //self.performSegue(withIdentifier: "loginSegue", sender: self)
