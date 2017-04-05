@@ -27,7 +27,7 @@
                 //echo "could not connect to database";
             }else
             {
-               // echo "Connected";
+                //echo "Connected";
             }
             //support all languages
             $this->conn->set_charset("utf8");
@@ -85,6 +85,43 @@
             
             return $returnArray;
         }
+        //get cat name to check with given cat name to avoid duplicates
+        public function getCatName($email,$name)
+        {
+          //echo "came";
+          $catsnames=array();
+          $sql="SELECT CName FROM Categories WHERE email='". $email."'";
+          $result = $this->conn->query($sql);
+          if ($result != null && (mysqli_num_rows($result) > 0))
+            {
+              $ee=mysqli_num_rows($result);
+                //echo "$ee";
+                while($row=$result->fetch_assoc())
+            {
+                //echo json_encode($row);
+
+                array_push($catsnames,$row);
+            }
+     
+                if (!empty($catsnames))
+                {
+                  //echo json_encode($catsnames);
+                   //echo "entered not empty of select ser and the row is $row";
+                    $returnArray = $catsnames;
+                    //echo json_encode($returnArray);
+                }
+            }
+            else
+            {
+              $returnArray = ["nothing","no"];
+                //echo "enterd null";
+            }
+            //echo json_encode($categories);
+          // echo "\n The array is $categories";
+            //echo json_encode($returnArray);
+            return $returnArray;
+
+        }
         //login check up
         public function loginUser($email,$password)
         {
@@ -107,11 +144,11 @@
            // echo "The array is $returnArray";
             return $returnArray;
         }
-public function categoriesdata($email,$firstlogin)
+public function categoriesdata($email,$firstlogin,$addcat)
         {
             //echo "entered";
             $categories=array();
-         if($firstlogin == 1)
+         if($firstlogin == 1 && $addcat == 2)
              {
                // echo " is 1";
                 $sql = "SELECT * FROM CategoriesDefault";
@@ -123,7 +160,7 @@ public function categoriesdata($email,$firstlogin)
                 }
                 else
                 {
-                    echo "is null";
+                    //echo "is null";
                 }
             
             //echo "$result";
@@ -139,7 +176,7 @@ public function categoriesdata($email,$firstlogin)
                 }
                 else
                 {
-                    echo "is null";
+                   // echo "is null";
                 }
                 //echo "$result";
             }
@@ -190,7 +227,117 @@ public function updateloginstatus($email,$firstlogin)
             //echo"return is $returnValue.  ";
                 //return $returnValue;
         }
+public function generateCID()
+{
+    //echo "entered";
+    $cid=0;
+    $count=0;
+    while ($count==0) {
+       $num=rand(1,100000);
+        $sql="SELECT * FROM Categories WHERE CID=$num";
+       $result = $this->conn->query($sql);
+       if ($result != null && (mysqli_num_rows($result) > 0))
+            {
+                $count=0;
+            }
+        else
+            {
+                $count=1;
+                $cid=$num;
+            }
+    }
 
+            return $num;
+}
+public function generateTID()
+{
+    //echo "entered";
+    $cid=0;
+    $count=0;
+    while ($count==0) {
+       $num=rand(1,100000);
+        $sql="SELECT * FROM Tasks WHERE TID=$num";
+       $result = $this->conn->query($sql);
+       if ($result != null && (mysqli_num_rows($result) > 0))
+            {
+                $count=0;
+            }
+        else
+            {
+                $count=1;
+                $cid=$num;
+            }
+    }
+
+            return $num;
+}
+
+public function insertCategory($rescatid,$email,$Cname,$Csubtitle)
+{
+    //echo "enetred register user";
+            //SQL COMMAND
+           // $sql = "INSERT INTO users SET username = ?, password = ?, email = ?";
+            $sql = "INSERT INTO Categories (CID,CName,Csubtitle,email) VALUES (?, ?, ?,?)";
+            //store query result in $statement
+           $statement = $this->conn->prepare($sql);
+           //if error
+           if(!$statement)
+           {
+            throw new Exception($statement->error);
+           }
+           //bind 3 parameters of type string to be placed in sql command
+           $statement->bind_param("isss", $rescatid, $Cname, $Csubtitle,$email);
+           // $statement->bindparam(1,$username);
+           // $statement->bindparam(2,$password);
+           // $statement->bindparam(3,$email);
+           $returnValue = $statement->execute();
+           //echo "return value is $returnValue :::::::";
+           return $returnValue;
+}
+public function insertTasks($restid,$rescatid)
+{
+//echo "enetred register user";
+            //SQL COMMAND
+           // $sql = "INSERT INTO users SET username = ?, password = ?, email = ?";
+            $sql = "INSERT INTO Tasks (TID,CID) VALUES (?, ?)";
+            //store query result in $statement
+           $statement = $this->conn->prepare($sql);
+           //if error
+           if(!$statement)
+           {
+            throw new Exception($statement->error);
+           }
+           //bind 3 parameters of type string to be placed in sql command
+           $statement->bind_param("ii", $restid, $rescatid);
+           // $statement->bindparam(1,$username);
+           // $statement->bindparam(2,$password);
+           // $statement->bindparam(3,$email);
+           $returnValue = $statement->execute();
+           //echo "return value is $returnValue :::::::";
+           return $returnValue;
+}
+public function insertColumn($restid,$rescatid,$nameofcol)
+{
+    //echo "enetred register user";
+            //SQL COMMAND
+           // $sql = "INSERT INTO users SET username = ?, password = ?, email = ?";
+            $sql = "INSERT INTO Columnss (TID,CID,ColName) VALUES (?, ?, ?)";
+            //store query result in $statement
+           $statement = $this->conn->prepare($sql);
+           //if error
+           if(!$statement)
+           {
+            throw new Exception($statement->error);
+           }
+           //bind 3 parameters of type string to be placed in sql command
+           $statement->bind_param("iis", $restid, $rescatid, $nameofcol);
+           // $statement->bindparam(1,$username);
+           // $statement->bindparam(2,$password);
+           // $statement->bindparam(3,$email);
+           $returnValue = $statement->execute();
+           //echo "return value is $returnValue :::::::";
+           return $returnValue;
+}
 
     }
     ?>
