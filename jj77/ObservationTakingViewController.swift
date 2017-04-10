@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,showAlertOnCLick,NotesProtocal {
     
@@ -47,7 +48,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         //print("columns are:\(self.coloumns)")
         //print("selected data is\(self.selectedData)")
         dataObserved.append(self.selectedData)
-        print("dataobserved is\(self.dataObserved)")
+        //print("dataobserved is\(self.dataObserved)")
         //self.detailsTable.reloadData()
         let indexPath = IndexPath(item: (self.noOfTimeDoneClciked+self.noOfTimeNotesClicked)-1, section: 0)
         self.detailsTable.insertRows(at:[indexPath], with: .fade)
@@ -81,7 +82,294 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         table3.allowsSelection=false
         table2.allowsSelection=false
         table1.allowsSelection=false
+        
+        
+        //set the name of the observation using alert
+        
+        let ac = UIAlertController(title: "Do You want to save the Observation", message: "Click cancle to continue observing", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
+            //go back to tasks page
+            DispatchQueue.main.async(execute: {
+
+            UserDefaults.standard.set(true, forKey: "doneobserving")
+            _ = self.navigationController?.popViewController(animated: true)
+            })
+        }
+        
+        ac.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in
+                //           // self.performSegue(withIdentifier: "pageWithTasks", sender: self)
+                //
+                        }
+                        ac.addAction(cancelAction)
+                        present(ac, animated: true, completion: nil)
+            
+            
+            
+//            //getting date in format
+//            var currentDate=self.formatter.string(from: self.date)
+//
+//            let fileName = "\(self.observationName).csv"
+//            let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+//            //initial text for csv file
+//            var csvText = "Observation Name,Observation Category,Date\n"
+//            let newLineHeading = "\(self.observationName),\(self.navTitle),\(currentDate)\n"
+//            csvText.append(newLineHeading)
+//            //assigning each observation of data observed to new line and add it to the
+//            for obsdata in self.dataObserved {
+//                for (key,value) in obsdata {
+//                    let newdataLine = "\(key),\(value)\n"
+//                    csvText.append(newdataLine)
+//                }
+//            }
+//            //now write that file to the path specified earlier
+//            do {
+//                try csvText.write(to: path!, atomically: true, encoding: String.Encoding.utf8)
+//                print("file created successfully")
+//                //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
+//                self.filenametoshow=fileName
+//                self.filenamesstored.append(fileName)
+//                
+//                //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
+//               // UserDefaults.standard.set(self.filenametoshow, forKey: "filenametoshow")
+//               // UserDefaults.standard.set(self.navTitle, forKey: "catnametoshow")
+//                self.obstakensuccess=true
+//                self.showobservationlist(flag: self.obstakensuccess)
+//                 //self.performSegue(withIdentifier: "showObservations", sender: self)
+//                
+//            } catch {
+//                print("Failed to create file")
+//                print("\(error)")
+//            }
+//
+//            
+//            
+//            
+//        }
+//        ac.addAction(okAction)
+//        ac.addTextField { (textfield:UITextField) in
+//            //can customize the text field here
+//            textfield.placeholder="Type name here"
+//        }
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in
+//           // self.performSegue(withIdentifier: "pageWithTasks", sender: self)
+//           
+//        }
+//        ac.addAction(cancelAction)
+//        present(ac, animated: true, completion: nil)
+//        
+        
+        
+        
+        
+//        //saving the complete observed data in databse
+//        
+//        let jsonStringPretty = JSONStringify(value: self.dataObserved as AnyObject, prettyPrinted: true)
+//        //making the stringed json to url
+//        let escapedString = jsonStringPretty.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
+//        print("url is \(escapedString)")
+        
+        
+        //creating the csv file to export it
+        
+        //first make the temporary directory paath and a file name
+        
+//        let fileName = "\(self.observationName).csv"
+//        let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+//        //initial text for csv file
+//        var csvText = "Observation Name,Observation Category,Date\n"
+//        let newLineHeading = "\(self.observationName),\(self.navTitle),\(currentDate)\n"
+//        csvText.append(newLineHeading)
+//        //assigning each observation of data observed to new line and add it to the 
+//        for obsdata in self.dataObserved {
+//            for (key,value) in obsdata {
+//                let newdataLine = "\(key),\(value)\n"
+//                csvText.append(newdataLine)
+//            }
+//        }
+//        //now write that file to the path specified earlier
+//        do {
+//            try csvText.write(to: path!, atomically: true, encoding: String.Encoding.utf8)
+//            print("file created successfully")
+//            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
+//            self.filenametoshow=fileName
+//            self.filenamesstored.append(fileName)
+//            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
+//            self.performSegue(withIdentifier: "showObservations", sender: self)
+//           
+//        } catch {
+//            print("Failed to create file")
+//            print("\(error)")
+//        }
+        
+        
+        
+        
+        
+        
+//        let directory = NSTemporaryDirectory()
+//        let filesNames = NSUUID().uuidString
+//        
+//        // This returns a URL? even though it is an NSURL class method
+//        let fullURL = NSURL.fileURL(withPathComponents: [directory , filesNames])
+//        print(fullURL)
+//        print(filesNames)
+//        //get the files at temp directory
+//        do {
+//            // Get the directory contents urls (including subfolders urls)
+//            let directoryContents = try FileManager.default.contentsOfDirectory(at: fullURL!, includingPropertiesForKeys: nil, options: [])
+//            //print(directoryContents)
+//            
+//            // if you want to filter the directory contents you can do like this:
+//            let csvfiles = directoryContents.filter{ $0.pathExtension == "csv" }
+//            print("csv urls:",csvfiles)
+//            let csvFileNames = csvfiles.map{ $0.deletingPathExtension().lastPathComponent }
+//            print("mp3 list:", csvFileNames)
+//            
+//        } catch let error as NSError {
+//            print("error in fetching the files")
+//            print(error.localizedDescription)
+//        }
+//
+//        //exporting that file to the mail
+//        
+//        let vc = UIActivityViewController(activityItems: [path], applicationActivities: [])
+//        present(vc, animated: true, completion: nil)
+//        //exclude some options
+//        vc.excludedActivityTypes = [
+//            UIActivityType.assignToContact,
+//            UIActivityType.saveToCameraRoll,
+//            UIActivityType.postToFlickr,
+//            UIActivityType.postToVimeo,
+//            UIActivityType.postToTencentWeibo,
+//            UIActivityType.postToTwitter,
+//            UIActivityType.postToFacebook,
+//            UIActivityType.openInIBooks
+//        ]
+        
+        
+        
+//        print("json data is \(jsonStringPretty)")
+//        
+//        
+//        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/savingobservation.php")! as URL)
+//        request.httpMethod="POST"
+//        let postString = "observeddata=\(jsonStringPretty)"
+//        request.httpBody = postString.data(using: String.Encoding.utf8)
+//        let task = URLSession.shared.dataTask(with: request as URLRequest){
+//            data, response, error in
+//            if error == nil
+//                
+//            {
+//                print("entered error is nil")
+//                DispatchQueue.main.async (execute: { () -> Void in
+//                    
+//                    do {
+////                        //get json result
+////                        //print("entered do")
+////                        //print(data)
+//                       let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [[String:String]]
+////                        //assign json to new var parsejson in secured way
+//                        guard json != nil else
+//                        {
+//                            print("error")
+//                            return
+//                        }
+//                       
+//                       // print(json)
+//                        
+//                        
+////                        //print(json?.count)
+////                        if(self.firstTimeLogin==1 && self.addedcat==2)
+////                        {
+////                            self.catDb.removeAll()
+////                            self.catsubsDb.removeAll()
+////                        }
+////                        else
+////                        {
+////                            self.catDb=["Usability Study ","Focus Groups","Dynamic systems observations"]
+////                            self.catsubsDb=["Testing the usage of each developed product","REquirements gathering observations","Testing the products in mobile environment"]
+////                        }
+////                        
+////                        print(self.catDb)
+////                        for var i in 0 ..< (json?.count)!
+////                        {
+////                            self.catDb.append((json?[i]["CName"]!)!)
+////                        }
+////                        for var i in 0 ..< (json?.count)!
+////                        {
+////                            self.catsubsDb.append((json?[i]["Csubtitle"]!)!)
+////                        }
+////                        print("table data\(self.catDb)")
+////                        self.CategoriesTable.reloadData()
+//                        
+//                        
+//                    }catch
+//                    {
+//                        print("error: \(error)")
+//                    }
+//                    //print("response = \(response)")
+//                    let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+//                    //print("response string = \(responseString!)")
+//                    
+//                })
+//                
+//                
+//            }
+//            else
+//            {
+//                
+//                return
+//            }
+//        }//task closing
+//        task.resume()
+        
+        
+        
+        
     }
+    //function for converting array of dictionaried in to json object
+//    func showobservationlist(flag:Bool)
+//    {
+//        DispatchQueue.main.async(execute: {
+//            // put yout code to do allocate new viewController from another
+//            // viewController here to ensure running in main thread
+//            if(flag==true)
+//            {
+//                self.tabBarController?.selectedIndex=0
+//                
+//            }
+//
+//        })
+//
+//        
+//    }
+    
+//    func JSONStringify(value: AnyObject,prettyPrinted:Bool = false) -> String{
+//        
+//        let options = prettyPrinted ? JSONSerialization.WritingOptions.prettyPrinted : JSONSerialization.WritingOptions(rawValue: 0)
+//        
+//        
+//        if JSONSerialization.isValidJSONObject(value) {
+//            
+//            do{
+//                let data = try JSONSerialization.data(withJSONObject: value, options: options)
+//                if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+//                    return string as String
+//                }
+//            }catch {
+//                
+//                print("error")
+//                //Access error here
+//            }
+//            
+//        }
+//        return ""
+//        
+//    }
+    
+
     
     @IBAction func starTimerAction(_ sender: UIButton) {
         //self.flagForTimer=true
@@ -135,6 +423,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         
         self.performSegue(withIdentifier: "notes", sender: self)
         self.notesData["Start Time"]=self.timerLabel.text
+            self.notesData["Task Name"]=self.taskname
        
        // self.notesData["Name"]=self.nameOFNotes
         
@@ -166,7 +455,15 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
             destin.delegate=self
             destin.navTitle=self.navTitle
         }
+//        if(segue.identifier=="showObservations")
+//        {
+//            let destin=segue.destination as! ObservationsViewController
+//            destin.categoryName=self.navTitle
+//            destin.filename=self.filenametoshow
+//        }
     }
+    var obstakensuccess=false
+   var filenametoshow=String()
     var taskname=String()
     var noOfTimeNotesClicked:Int=0
     var noteseditingendedtime=String()
@@ -195,11 +492,17 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
     var detailsTabSelectedRow=IndexPath()
     var detailstableindexforcolor:[IndexPath]=[]
     var coloringflag=Bool()
+    var observationName = String()
+    var date=Date()
+    var formatter=DateFormatter()
+    var filenamesstored=[String]()
+    
 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        formatter.dateFormat="MM/dd/yy"
         
         for i in 0 ..< self.coloumns.count
         {
@@ -260,7 +563,7 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         {
         self.noteseditingendedtime=self.timerLabel.text!
         self.notesData["End Time"]=self.noteseditingendedtime
-        print(notesData)
+        //print(notesData)
          self.dataObserved.append(self.notesData)
             let indexPath = IndexPath(item: (self.noOfTimeDoneClciked+self.noOfTimeNotesClicked)-1, section: 0)
             self.detailsTable.insertRows(at:[indexPath], with: .left)
@@ -285,7 +588,25 @@ class ObservationTakingViewController: UIViewController,UITableViewDelegate,UITa
         }
         
     }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        print("data observed finally is \(self.dataObserved)")
+        //empty the tables
+    
+        //send the observed data ta tasks page
+        
+        if(UserDefaults.standard.array(forKey: "observeddatawhole") == nil)
+        {
+            UserDefaults.standard.set(true, forKey: "firstObser")
+            UserDefaults.standard.set(self.dataObserved, forKey: "observeddatawhole")
+        }
+        else
+        {
+            UserDefaults.standard.set(false, forKey: "firstObser")
+            UserDefaults.standard.set(self.dataObserved, forKey: "observeddatatoAddtowhole")
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

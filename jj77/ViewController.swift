@@ -175,23 +175,61 @@ class ViewController: UIViewController {
         {
             
             //nets
+            //dont let user have same user name
             let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/register.php")! as URL)
             request.httpMethod="POST"
             let postString = "username=\(usernamesignup.text!)&password=\(passwordsignup.text!)&email=\(emailSignUp.text!)"
             request.httpBody = postString.data(using: String.Encoding.utf8)
             let task = URLSession.shared.dataTask(with: request as URLRequest){
                 data, response, error in
-                if error != nil
+                if error == nil
+                    
                 {
-                    print("error=\(error)")
+                    print("entered error is nil")
+                    DispatchQueue.main.async (execute: { () -> Void in
+                        
+                        do {
+                            
+                            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                            
+                            guard let parseJson = json else{
+                                print("error")
+                                return
+                            }
+                            print(parseJson)
+                            let status:String=parseJson["status"] as! String
+                           
+                            if status == "200"{
+                                let name1:String=parseJson["UserName"] as! String
+                                let date:String=parseJson["Date"] as! String
+                                let emil:String=parseJson["Email"] as! String
+                                self.creatingfile(name1: name1,date: date,emik: emil)
+                            }
+                            else{
+                                print("can not create directory folder")
+                            }
+                            
+                            
+                            
+                        }catch
+                        {
+                            print("error: \(error)")
+                        }
+                        //print("response = \(response)")
+                        let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                        print("response string = \(responseString!)")
+                        
+                    })
+                    
+                    
+                }
+                else
+                {
+                    //print("entered error is not nill")
+                    //print("error=\(error)")
+                    self.dummy.text=error as! String?
                     return
                 }
-                
-
-                print("response = \(response)")
-                let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
-                print("response string = \(responseString)")
-                
             }//task closing
             task.resume()
             
@@ -213,6 +251,93 @@ class ViewController: UIViewController {
         
     }//action closing
     //loginAction
+    
+    
+    
+    func creatingfile(name1:String,date:String,emik:String)
+    {
+        let nameforfolder:String = (name1) + (date)
+        //creating a folder with name as user
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        //server location
+        //let documentsDirectory = NSURL(string:"http://localhost:8888/usersobservation")
+        let dataPath = documentsDirectory.appendingPathComponent("\(nameforfolder)")
+        //UserDefaults.standard.set(dataPath, forKey: "fileLocation")
+        //print(dataPath)
+        
+        //path in string format
+        let pathstring = dataPath.path
+        print("stirn path \(pathstring)")
+        print("email is \(emik)")
+        //pathstring.data
+        
+        do {
+            try FileManager.default.createDirectory(atPath: (dataPath.path), withIntermediateDirectories: true, attributes: nil)
+            //connect with databse and inser the file path
+            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/savefilepath.php")! as URL)
+            request.httpMethod="POST"
+            
+            let postString = "email=\(emik)&pathforfile=\(pathstring)"
+            request.httpBody = postString.data(using: String.Encoding.utf8)
+            let task = URLSession.shared.dataTask(with: request as URLRequest){
+                data, response, error in
+                if error == nil
+                    
+                {
+                    //print("entered error is nil")
+                    DispatchQueue.main.async (execute: { () -> Void in
+                        
+                        do {
+                            
+                            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                            
+                            guard let parseJson = json else{
+                                print("error")
+                                return
+                            }
+                            print(parseJson)
+                            let status:String=parseJson["status"] as! String
+                            
+                            if status == "200"{
+                                print("directory saved success")
+                                
+                            }
+                            else{
+                                print("directory path not saved failed")
+                            }
+                            
+                            
+                            
+                        }catch
+                        {
+                            print("error: \(error)")
+                        }
+                        //print("response = \(response)")
+                        let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                        print("response string = \(responseString!)")
+                        
+                    })
+                    
+                    
+                }
+                else
+                {
+                    //print("entered error is not nill")
+                    print("error=\(error)")
+                    
+                }
+            }//task closing
+            task.resume()
+            
+            
+
+            
+        } catch let error as NSError {
+            print("Error creating directory: \(error.localizedDescription)")
+        }
+        
+
+    }
     
     @IBAction func loginAction(_ sender: Any) {
         
@@ -260,6 +385,7 @@ class ViewController: UIViewController {
                                 UserDefaults.standard.set(email, forKey: "Email")
                                 UserDefaults.standard.set(firstlogin, forKey: "FirstTimeLogin")
                                 UserDefaults.standard.set(2, forKey: "addedcategory")
+                                UserDefaults.standard.set(false, forKey: "doneobserving")
                                 
                                 print("entered user name block")
                                 print("username: \(username)")

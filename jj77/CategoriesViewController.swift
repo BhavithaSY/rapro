@@ -119,7 +119,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
                     }
                     //print("response = \(response)")
                     let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
-                    print("response string = \(responseString!)")
+                   // print("response string = \(responseString!)")
                     
                 })
                 

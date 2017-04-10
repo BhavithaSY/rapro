@@ -9,6 +9,135 @@
 import UIKit
 
 class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    var nameofObservation=String()
+    
+    var dataobservedtoadd=[[String:String]]()
+    var dataobservedwhole=[[String:String]]()
+    var date=Date()
+    var formatter=DateFormatter()
+    var email=String()
+    
+    @IBAction func doneObservingAction(_ sender: UIButton) {
+        
+        print(" data finally observed and need to be stored:\(self.dataobservedwhole)")
+        //save it to the csv file
+        let ac = UIAlertController(title: "Do You want to save the Observation", message: "Click cancle to continue observing", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
+            //go back to tasks page
+            UserDefaults.standard.set(true, forKey: "firstObser")
+            let alerttext=ac.textFields?[0]
+            self.nameofObservation=(alerttext?.text)!
+            let fileName = "\(self.nameofObservation).csv"
+           //here get the location from database
+            self.email=UserDefaults.standard.string(forKey: "Email")!
+            self.getLocationFormdb(emil: self.email)
+            
+            
+//            //let pathtosavecsis = UserDefaults.standard.url(forKey: "fileLocation")
+//            //print(pathtosavecsis)
+//            //let fileexactpath=pathtosavecsis?.appendingPathComponent(fileName)
+//            
+//            
+//            var csvText = "Observation Name,Observation Category,Date\n"
+//            let newLineHeading = "\(self.nameofObservation),\(self.navTitle),\(currentDate)\n"
+//            csvText.append(newLineHeading)
+//                    //assigning each observation of data observed to new line and add it to the
+//            for obsdata in self.dataobservedwhole {
+//                        for (key,value) in obsdata {
+//                            let newdataLine = "\(key),\(value)\n"
+//                            csvText.append(newdataLine)
+//                        }
+//                    }
+//                    //now write that file to the path specified earlier
+//                    do {
+//                        //try csvText.write(to: fileexactpath!, atomically: true, encoding: String.Encoding.utf8)
+//                        print("file created successfully")
+//            //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
+//            //            self.filenametoshow=fileName
+//            //            self.filenamesstored.append(fileName)
+//            //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
+//            //            self.performSegue(withIdentifier: "showObservations", sender: self)
+//            //           
+//                    } catch {
+//                        print("Failed to create file")
+//            //            print("\(error)")
+//                    }
+//
+            
+            
+            
+            
+            
+            
+
+                   }
+        
+        ac.addAction(okAction)
+        ac.addTextField { (textfield:UITextField) in
+            //can customize the text field here
+            textfield.placeholder="Type name here"
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in
+            
+        }
+        ac.addAction(cancelAction)
+        present(ac, animated: true, completion: nil)
+        
+
+        //send to the observations page to view
+        
+        //clear the userdefault
+        UserDefaults.standard.removeObject(forKey: "observeddatawhole")
+        UserDefaults.standard.removeObject(forKey: "observeddatatoAddtowhole")
+        
+    }
+    
+    
+    func getLocationFormdb(emil:String)
+    {
+        let currentDate=self.formatter.string(from: self.date)
+        
+        //write database connections
+        
+        
+        //let pathtosavecsis = UserDefaults.standard.url(forKey: "fileLocation")
+        //print(pathtosavecsis)
+        //let fileexactpath=pathtosavecsis?.appendingPathComponent(fileName)
+        
+        
+        var csvText = "Observation Name,Observation Category,Date\n"
+        let newLineHeading = "\(self.nameofObservation),\(self.navTitle),\(currentDate)\n"
+        csvText.append(newLineHeading)
+        //assigning each observation of data observed to new line and add it to the
+        for obsdata in self.dataobservedwhole {
+            for (key,value) in obsdata {
+                let newdataLine = "\(key),\(value)\n"
+                csvText.append(newdataLine)
+            }
+        }
+        //now write that file to the path specified earlier
+        do {
+            //try csvText.write(to: fileexactpath!, atomically: true, encoding: String.Encoding.utf8)
+            print("file created successfully")
+            //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
+            //            self.filenametoshow=fileName
+            //            self.filenamesstored.append(fileName)
+            //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
+            //            self.performSegue(withIdentifier: "showObservations", sender: self)
+            //
+        } catch {
+            print("Failed to create file")
+            //            print("\(error)")
+        }
+        
+
+    
+    }
+    
+    
+    
+    
     
     @IBOutlet weak var tableWithTasks: UITableView!
     
@@ -56,14 +185,44 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        formatter.dateFormat="MM/dd/yy"
+
         print(navTitle)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         self.navigationItem.title=self.navTitle
         self.tableWithTasks.delegate=self
         self.tableWithTasks.dataSource=self
+        
+        //apply the adding tasks functionalitty
+        
 
         // Do any additional setup after loading the view.
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+           //get the to add array
+        if((UserDefaults.standard.bool(forKey: "doneobserving") == true))
+      {
+        if(UserDefaults.standard.bool(forKey: "firstObser") == false)
+        {
+        self.dataobservedtoadd=UserDefaults.standard.array(forKey: "observeddatatoAddtowhole") as! [[String : String]]
+        self.dataobservedwhole=UserDefaults.standard.array(forKey: "observeddatawhole") as! [[String : String]]
+        
+        //merge it with already saved array
+        self.dataobservedwhole.append(contentsOf: self.dataobservedtoadd)
+        //save the new array
+            UserDefaults.standard.set(self.dataobservedwhole, forKey: "observeddatawhole")
+            print("ni bon \(UserDefaults.standard.array(forKey: "observeddatawhole"))")
+        }
+        else
+        {
+            self.dataobservedwhole=UserDefaults.standard.array(forKey: "observeddatawhole") as! [[String : String]]
+        }
+            
+        }
+       
+      
     }
 
     override func didReceiveMemoryWarning() {
