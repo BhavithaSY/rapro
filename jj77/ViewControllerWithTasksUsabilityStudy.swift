@@ -16,6 +16,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
     var date=Date()
     var formatter=DateFormatter()
     var email=String()
+    var locationfromdbinurlformat:NSURL?
     
     @IBAction func doneObservingAction(_ sender: UIButton) {
         
@@ -27,42 +28,10 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
             UserDefaults.standard.set(true, forKey: "firstObser")
             let alerttext=ac.textFields?[0]
             self.nameofObservation=(alerttext?.text)!
-            let fileName = "\(self.nameofObservation).csv"
+            
            //here get the location from database
             self.email=UserDefaults.standard.string(forKey: "Email")!
             self.getLocationFormdb(emil: self.email)
-            
-            
-//            //let pathtosavecsis = UserDefaults.standard.url(forKey: "fileLocation")
-//            //print(pathtosavecsis)
-//            //let fileexactpath=pathtosavecsis?.appendingPathComponent(fileName)
-//            
-//            
-//            var csvText = "Observation Name,Observation Category,Date\n"
-//            let newLineHeading = "\(self.nameofObservation),\(self.navTitle),\(currentDate)\n"
-//            csvText.append(newLineHeading)
-//                    //assigning each observation of data observed to new line and add it to the
-//            for obsdata in self.dataobservedwhole {
-//                        for (key,value) in obsdata {
-//                            let newdataLine = "\(key),\(value)\n"
-//                            csvText.append(newdataLine)
-//                        }
-//                    }
-//                    //now write that file to the path specified earlier
-//                    do {
-//                        //try csvText.write(to: fileexactpath!, atomically: true, encoding: String.Encoding.utf8)
-//                        print("file created successfully")
-//            //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
-//            //            self.filenametoshow=fileName
-//            //            self.filenamesstored.append(fileName)
-//            //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
-//            //            self.performSegue(withIdentifier: "showObservations", sender: self)
-//            //           
-//                    } catch {
-//                        print("Failed to create file")
-//            //            print("\(error)")
-//                    }
-//
             
             
             
@@ -99,38 +68,95 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         let currentDate=self.formatter.string(from: self.date)
         
         //write database connections
-        
-        
-        //let pathtosavecsis = UserDefaults.standard.url(forKey: "fileLocation")
-        //print(pathtosavecsis)
-        //let fileexactpath=pathtosavecsis?.appendingPathComponent(fileName)
-        
-        
-        var csvText = "Observation Name,Observation Category,Date\n"
-        let newLineHeading = "\(self.nameofObservation),\(self.navTitle),\(currentDate)\n"
-        csvText.append(newLineHeading)
-        //assigning each observation of data observed to new line and add it to the
-        for obsdata in self.dataobservedwhole {
-            for (key,value) in obsdata {
-                let newdataLine = "\(key),\(value)\n"
-                csvText.append(newdataLine)
+        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/getfilepath.php")! as URL)
+        request.httpMethod="POST"
+        let postString = "email=\(emil)"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        let task = URLSession.shared.dataTask(with: request as URLRequest)
+        {
+            data, response, error in
+            if error == nil
+                
+            {
+                print("entered error is nil")
+                DispatchQueue.main.async (execute: { () -> Void in
+                    
+                    do {
+                        //get json result
+                        print("entered do")
+                        let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                        //print(json)
+                        //assign json to new var parsejson in secured way
+                        guard let parseJson = json else{
+                            print("error")
+                            return
+                        }
+                        print(parseJson)
+                        let locationstring:String=parseJson["filelocation"] as! String
+                        let lp=locationstring.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                        print("file location retrieved from db is :\(locationstring)")
+                        let url = URL(string: lp!) as! URL
+                        
+                        //self.locationfromdbinurlformat=NSURL(string: locationstring)
+                        //self.locationfromdbinurlformat=URL(locationstring:String)
+                        print("file location retrieved from db is in url form \(url)")
+                        
+                        
+                        
+                        //saving to file
+                        let fileName = "\(self.nameofObservation).csv"
+                        let fileexactpath=url.appendingPathComponent(fileName)
+                        print(fileexactpath)
+                        var csvText = "Observation Name,Observation Category,Date\n"
+                                let newLineHeading = "\(self.nameofObservation),\(self.navTitle),\(currentDate)\n"
+                                csvText.append(newLineHeading)
+                                //assigning each observation of data observed to new line and add it to the
+                                for obsdata in self.dataobservedwhole {
+                                    for (key,value) in obsdata {
+                                        let newdataLine = "\(key),\(value)\n"
+                                        csvText.append(newdataLine)
+                                    }
+                                }
+                        print(csvText)
+                        do {
+                                        try csvText.write(to: fileexactpath, atomically: true, encoding: String.Encoding.utf8)
+                                        print("file created successfully")
+                                        //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
+                                               
+                                        //            self.filenamesstored.append(fileName)
+                                        //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
+                                        //            self.performSegue(withIdentifier: "showObservations", sender: self)
+                                        //
+                        } catch let error as NSError {
+                            print("Failed writing to URL: \(fileexactpath), Error: " + error.localizedDescription)
+                        }
+
+
+
+                        
+                        
+                        
+                    }catch
+                    {
+                        print("error: \(error)")
+                    }
+                    //print("response = \(response)")
+                    let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                    //print("response string = \(responseString!)")
+                    
+                })
+                
+                
             }
-        }
-        //now write that file to the path specified earlier
-        do {
-            //try csvText.write(to: fileexactpath!, atomically: true, encoding: String.Encoding.utf8)
-            print("file created successfully")
-            //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
-            //            self.filenametoshow=fileName
-            //            self.filenamesstored.append(fileName)
-            //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
-            //            self.performSegue(withIdentifier: "showObservations", sender: self)
-            //
-        } catch {
-            print("Failed to create file")
-            //            print("\(error)")
-        }
-        
+            else
+            {
+                print("entered error is not nill")
+//                print("error=\(error)")
+//                self.dummy.text=error as! String?
+                return
+            }
+        }//task closing
+        task.resume()
 
     
     }

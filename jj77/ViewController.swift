@@ -185,6 +185,7 @@ class ViewController: UIViewController {
                 if error == nil
                     
                 {
+                    print(data)
                     print("entered error is nil")
                     DispatchQueue.main.async (execute: { () -> Void in
                         
@@ -263,7 +264,7 @@ class ViewController: UIViewController {
         //let documentsDirectory = NSURL(string:"http://localhost:8888/usersobservation")
         let dataPath = documentsDirectory.appendingPathComponent("\(nameforfolder)")
         //UserDefaults.standard.set(dataPath, forKey: "fileLocation")
-        //print(dataPath)
+        print(dataPath)
         
         //path in string format
         let pathstring = dataPath.path
@@ -277,7 +278,7 @@ class ViewController: UIViewController {
             let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/savefilepath.php")! as URL)
             request.httpMethod="POST"
             
-            let postString = "email=\(emik)&pathforfile=\(pathstring)"
+            let postString = "email=\(emik)&pathforfile=\(dataPath)"
             request.httpBody = postString.data(using: String.Encoding.utf8)
             let task = URLSession.shared.dataTask(with: request as URLRequest){
                 data, response, error in
