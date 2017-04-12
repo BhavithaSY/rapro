@@ -1,10 +1,10 @@
 <?PHP
-
 // STEP-1 declare parameters of user info
 //echo "hiiiii";
 $email = htmlentities($_REQUEST["email"]);
 $firstLogin = htmlentities($_REQUEST["firstLogin"]);
-if (empty($firstLogin) || empty($email)) 
+$addcat = htmlentities($_REQUEST["addcat"]);
+if (empty($firstLogin) || empty($email) || empty($addcat)) 
 {
 //echo "not empty";
 	$returnArray["status"]="400";
@@ -17,18 +17,14 @@ $host = trim($file["dbhost"]);
 $user = trim($file["dbuser"]);
 $pass = trim($file["dbpass"]);
 $name = trim($file["dbname"]);
-
 require("secure/access.php");
 $access = new access($host,$user,$pass,$name);
 $access->connect();
-
-$result = $access->categoriesdata($email,$firstLogin);
-
+$result = $access->categoriesdata($email,$firstLogin,$addcat);
 if($firstLogin==1)
 {
 	//echo "enterdGGGGG";
 $access->updateloginstatus($email,$firstLogin);
-
 }
 if($result)
 {
@@ -51,14 +47,12 @@ else
 	$returnArray["Message"] = "No such user Exists";
 	echo json_encode($returnArray);
 }
-
 //echo "Result is $result";
 // if($result1)
 // {
 // 	//$user = $access->selectUser($username);
 // //echo json_encode($user);
 // 	//$returnArray["status"] = "200";
-
 // 	$returnArray1=$result1;
 // 	// $returnArray["Cid"] = $result["CID"];
 // 	// $returnArray["Cname"] = $result["CName"];
@@ -80,7 +74,5 @@ else
 // 	echo json_encode($returnArray1);
 	
 // }
-
 //STEP-4 close connection
-
 $access->disconnect();
