@@ -24,6 +24,8 @@
 		5AA66CDF1E3D6FBC00777413 /* jj77.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5AA66CDD1E3D6FBC00777413 /* jj77.xcdatamodeld */; };
 		5AA66CE11E3D6FBC00777413 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AA66CE01E3D6FBC00777413 /* Assets.xcassets */; };
 		5AA66CE41E3D6FBC00777413 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AA66CE21E3D6FBC00777413 /* LaunchScreen.storyboard */; };
+		5AF23BC01EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF23BBE1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.swift */; };
+		5AF23BC11EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AF23BBF1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.xib */; };
 		5AF4B2531E7F42570065D732 /* SetttingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF4B2521E7F42570065D732 /* SetttingsViewController.swift */; };
 		5AF4B2551E7F4D570065D732 /* addingCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF4B2541E7F4D570065D732 /* addingCategoriesViewController.swift */; };
 		5AFAE8631E6E5AC0000C6AD4 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAE8621E6E5AC0000C6AD4 /* NotesViewController.swift */; };
@@ -49,6 +51,8 @@
 		5AA66CE01E3D6FBC00777413 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5AA66CE31E3D6FBC00777413 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5AA66CE51E3D6FBC00777413 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5AF23BBE1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksheadertableTableViewCell.swift; sourceTree = "<group>"; };
+		5AF23BBF1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TasksheadertableTableViewCell.xib; sourceTree = "<group>"; };
 		5AF4B2521E7F42570065D732 /* SetttingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetttingsViewController.swift; sourceTree = "<group>"; };
 		5AF4B2541E7F4D570065D732 /* addingCategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addingCategoriesViewController.swift; sourceTree = "<group>"; };
 		5AFAE8621E6E5AC0000C6AD4 /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				5A494F4E1E74C42800CFD009 /* userDefaultsnames */,
 				5AF4B2521E7F42570065D732 /* SetttingsViewController.swift */,
 				5AF4B2541E7F4D570065D732 /* addingCategoriesViewController.swift */,
+				5AF23BBE1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.swift */,
+				5AF23BBF1EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.xib */,
 			);
 			path = jj77;
 			sourceTree = "<group>";
@@ -172,6 +178,7 @@
 				5AA66CE41E3D6FBC00777413 /* LaunchScreen.storyboard in Resources */,
 				5A8D0D6E1E6A69B300F97095 /* ObservationTakingTableViewCell.xib in Resources */,
 				5A6C22A41E6639D3005EF57E /* TableViewCellHeader.xib in Resources */,
+				5AF23BC11EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.xib in Resources */,
 				5AA66CE11E3D6FBC00777413 /* Assets.xcassets in Resources */,
 				5AA66CDC1E3D6FBC00777413 /* Main.storyboard in Resources */,
 			);
@@ -193,6 +200,7 @@
 				5AA66CD71E3D6FBC00777413 /* AppDelegate.swift in Sources */,
 				5AF4B2551E7F4D570065D732 /* addingCategoriesViewController.swift in Sources */,
 				5A234BBA1E5FC22000AAB1EC /* ObservationsViewController.swift in Sources */,
+				5AF23BC01EAEC5AB00AEB3C9 /* TasksheadertableTableViewCell.swift in Sources */,
 				5AFAE8631E6E5AC0000C6AD4 /* NotesViewController.swift in Sources */,
 				5A234BBC1E5FC23C00AAB1EC /* CategoriesViewController.swift in Sources */,
 				5AF4B2531E7F42570065D732 /* SetttingsViewController.swift in Sources */,

@@ -9,13 +9,20 @@ import UIKit
 
 class CategoriesViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
-    var catDb:[String]=["Usability Study ","Focus Groups","Dynamic systems observations"]
-    var catsubsDb:[String]=["Testing the usage of each developed product","REquirements gathering observations","Testing the products in mobile environment"]
+//    var catDb:[String]=["Usability Study ","Focus Groups","Dynamic systems observations"]
+//    var catsubsDb:[String]=["Testing the usage of each developed product","Requirements gathering observations","Testing the products in mobile environment"]
+//    var catsId:[Int]=[1,2,3]
 
+    var catDB=[String]()
+    var catsubsDb=[String]()
+    var catsId=[Int]()
+    
+    
     var email=String()
     var firstTimeLoaded=Bool()
     var firstTimeLogin=Int()
     var addedcat=Int()
+    var selectedcatid=Int()
     //var categories:[String]=["Usability Study ","Focus Groups","Dynamic systems observations"]
     // var categoriesSubtitle:[String]=["Testing the usage of each developed product","REquirements gathering observations","Testing the products in mobile environment"]
     var selectedCategory:String = ""
@@ -87,29 +94,35 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
                             return
                         }
                         
-                        //print(json)
+                        print(json)
                         //print(json?.count)
-                        if(self.firstTimeLogin==1 && self.addedcat==2)
-                        {
-                            self.catDb.removeAll()
-                            self.catsubsDb.removeAll()
-                        }
-                        else
-                        {
-                            self.catDb=["Usability Study ","Focus Groups","Dynamic systems observations"]
-                            self.catsubsDb=["Testing the usage of each developed product","REquirements gathering observations","Testing the products in mobile environment"]
-                        }
-                        
-                        print(self.catDb)
+//                        if(self.firstTimeLogin==1 && self.addedcat==2)
+//                        {
+//                            self.catDb.removeAll()
+//                            self.catsubsDb.removeAll()
+//                            self.catsId.removeAll()
+//                        }
+//                        else
+//                        {
+//                            self.catDb=["Usability Study ","Focus Groups","Dynamic systems observations"]
+//                            self.catsubsDb=["Testing the usage of each developed product","REquirements gathering observations","Testing the products in mobile environment"]
+//                            self.catsId=[1,2,3]
+//                        }
+//                        
+//                        print(self.catDb)
                         for var i in 0 ..< (json?.count)!
                         {
-                            self.catDb.append((json?[i]["CName"]!)!)
-                        }
-                        for var i in 0 ..< (json?.count)!
-                        {
+                            self.catDB.append((json?[i]["CName"]!)!)
                             self.catsubsDb.append((json?[i]["Csubtitle"]!)!)
+                            self.catsId.append(Int((json?[i]["CID"]!)!)!)
+                            
                         }
-                        print("table data\(self.catDb)")
+//                        for var i in 0 ..< (json?.count)!
+//                        {
+//                            self.catsubsDb.append((json?[i]["Csubtitle"]!)!)
+//                        }
+                        //print("table data\(self.catDB)")
+                        //print("ids retrieved \(self.catsId)")
                         self.CategoriesTable.reloadData()
                         
                         
@@ -119,7 +132,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
                     }
                     //print("response = \(response)")
                     let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
-                   // print("response string = \(responseString!)")
+                    //print("response string = \(responseString!)")
                     
                 })
                 
@@ -134,7 +147,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         task.resume()
     }
     override func viewWillDisappear(_ animated: Bool) {
-        self.catDb.removeAll()
+        self.catDB.removeAll()
         self.catsubsDb.removeAll()
     }
     func numberOfSections(CategoriesTable: UITableView) -> Int {
@@ -145,7 +158,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     func tableView(_ CategoriesTable: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //return categories.count
-        return self.catDb.count
+        return self.catDB.count
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Select Observation Type"
@@ -154,7 +167,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     func tableView(_ CategoriesTable: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = CategoriesTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         //cell.textLabel?.text=categories[indexPath.row]
-        cell.textLabel?.text=self.catDb[indexPath.row]
+        cell.textLabel?.text=self.catDB[indexPath.row]
         //cell.detailTextLabel?.text=categoriesSubtitle[indexPath.row]
         cell.detailTextLabel?.text=self.catsubsDb[indexPath.row]
         
@@ -167,7 +180,8 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
     {
         // print("User selected table row \(indexPath.row) and item \(categories[indexPath.row])")
         //selectedCategory=categories[indexPath.row]
-        self.selectedCategory=self.catDb[indexPath.row]
+        self.selectedCategory=self.catDB[indexPath.row]
+        self.selectedcatid=self.catsId[indexPath.row]
         let ac = UIAlertController(title: "Title", message: "please choose the observation type", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Customize", style: .default) { (_) in
             //presentViewController(yourSetupController, animated: true, completion: nil)
@@ -196,6 +210,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
             if let destinName=segue.destination as? ViewControllerWithTasksUsabilityStudy
             {
                 destinName.navTitle=self.selectedCategory
+                destinName.catid=self.selectedcatid
             }
         }
     }

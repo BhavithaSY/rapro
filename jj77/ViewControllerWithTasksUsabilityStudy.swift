@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegate,UITableViewDataSource,addtaskonclick {
     var nameofObservation=String()
     
     var dataobservedtoadd=[[String:String]]()
@@ -17,7 +17,10 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
     var formatter=DateFormatter()
     var email=String()
     var locationfromdbinurlformat:NSURL?
-    
+    var catid=Int()
+    var navTitle=String()
+    var tasksList=[String]()
+    var taskname=String()
     @IBAction func doneObservingAction(_ sender: UIButton) {
         
         print(" data finally observed and need to be stored:\(self.dataobservedwhole)")
@@ -122,7 +125,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
                                         try csvText.write(to: fileexactpath, atomically: true, encoding: String.Encoding.utf8)
                                         print("file created successfully")
                                         //            //self.filenamesstored=UserDefaults.standard.array(forKey: "observedfileNamesarray") as! [String]
-                                               
+                            
                                         //            self.filenamesstored.append(fileName)
                                         //            //UserDefaults.standard.set(self.filenamesstored, forKey: "observedfileNamesarray")
                                         //            self.performSegue(withIdentifier: "showObservations", sender: self)
@@ -187,19 +190,26 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
     }
     
     
-    var navTitle=String()
-    var tasksList=["Task1","Task2","Task3","Task4"]
-    var taskname=String()
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if(tasksList != nil)
+        {
        return self.tasksList.count
+        }
+        else{
+            return 1
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
        return 1
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TasksCell", for: indexPath)
+        if(tasksList != nil)
+        {
         cell.textLabel?.text=self.tasksList[indexPath.row]
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -208,11 +218,39 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         self.taskname=(currentCell.textLabel?.text)!
 
     }
-
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        var height = CGFloat(28)
+        return height
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header=Bundle.main.loadNibNamed("TasksheadertableTableViewCell", owner: self, options: nil)?.first as! TasksheadertableTableViewCell
+        header.delegates=self
+        return header
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+            if editingStyle == .delete
+            {
+                self.tasksList.remove(at: indexPath.row)
+                tableView.reloadData()
+                //delete the task from database here
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+            }
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         formatter.dateFormat="MM/dd/yy"
-
         print(navTitle)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
@@ -227,7 +265,77 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-           //get the to add array
+        print("The cats transfered \(self.catid)")
+        
+        
+        //connect to database and retrive the tasks from database
+        
+        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/tasksretriving.php")! as URL)
+        request.httpMethod="POST"
+        let postString = "categoryID=\(self.catid)"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        let task = URLSession.shared.dataTask(with: request as URLRequest){
+            data, response, error in
+            if error == nil
+                
+            {
+                //print(data)
+                print("entered error is nil")
+                DispatchQueue.main.async (execute: { () -> Void in
+                    
+                    do {
+                        
+                        let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [[String:String]]
+                        
+                        guard let parseJson = json else{
+                            print("error")
+                            return
+                        }
+                        print(parseJson)
+                        for var i in 0 ..< (json?.count)!
+                        {
+
+                        self.tasksList.append((json?[i]["Tname"]!)!)
+                        }
+                        print("tasks are:\(self.tasksList)")
+                        self.tableWithTasks.reloadData()
+                        
+                    }catch
+                    {
+                        print("error: \(error)")
+                    }
+                    //print("response = \(response)")
+                    let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                    print("response string = \(responseString!)")
+                    
+                })
+                
+                
+            }
+            else
+            {
+                //print("entered error is not nill")
+                //print("error=\(error)")
+                
+                return
+            }
+        }//task closing
+        task.resume()
+        
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        //get the to add array
         if((UserDefaults.standard.bool(forKey: "doneobserving") == true))
       {
         if(UserDefaults.standard.bool(forKey: "firstObser") == false)
@@ -247,10 +355,106 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         }
             
         }
-       
-      
-    }
+     }
 
+    
+    func showAlertWithTextforaddingcell()
+    {
+        let alert=UIAlertController(title:"Add Task",message:"Please enter the name of task",preferredStyle:.alert)
+        
+        //ok action
+        let ok=UIAlertAction(title:"OK",style:UIAlertActionStyle.default){(_) in
+            let alertTextField=alert.textFields?[0]
+            let nameoftasktosend = ((alertTextField?.text)!)
+          //  print(nameoftasktosend)
+            self.tasksList.append((alertTextField?.text)!)
+            self.tableWithTasks.reloadData()
+            
+            
+            //connect to database and add the task here
+            
+            
+            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/inserttasksandcolumns.php")! as URL)
+            request.httpMethod="POST"
+            let postString = "categoryID=\(self.catid)&taskname=\(nameoftasktosend)"
+            request.httpBody = postString.data(using: String.Encoding.utf8)
+            let task = URLSession.shared.dataTask(with: request as URLRequest){
+                data, response, error in
+                if error == nil
+                    
+                {
+                    //print(data)
+                    print("entered error is nil")
+                    DispatchQueue.main.async (execute: { () -> Void in
+                        
+                        do {
+                            
+                            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                            
+                            guard let parseJson = json else{
+                                print("error")
+                                return
+                            }
+                            print(parseJson)
+                            let status:String=parseJson["status"] as! String
+                            
+                            if status == "200"{
+                                print("successcfully added task and cols")
+                            }
+                            else{
+                                print("can not add task and col")
+                            }
+                            
+                            
+                            
+                        }catch
+                        {
+                            print("error: \(error)")
+                        }
+                        //print("response = \(response)")
+                        let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                        print("response string = \(responseString!)")
+                        
+                    })
+                    
+                    
+                }
+                else
+                {
+                    //print("entered error is not nill")
+                    //print("error=\(error)")
+                    
+                    return
+                }
+            }//task closing
+            task.resume()
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+        //add text field
+        alert.addTextField { (textfield:UITextField) in
+            //can customize the text field here
+            textfield.placeholder="Enter name  here"
+        }
+        alert.addAction(ok)
+        //cancel action
+        let cancel=UIAlertAction(title:"Cancel",style:UIAlertActionStyle.cancel,handler:nil)
+        alert.addAction(cancel)
+        //present on screen
+        self.present(alert,animated:true,completion:nil)
+        
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

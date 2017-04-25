@@ -40,26 +40,26 @@ class addingCategoriesViewController: UIViewController {
     
     
     @IBAction func saveaction(_ sender: UIButton) {
-        if(self.col1.text != "")
-        {
-            self.column1=self.col1.text!
-        }
-        if(self.col2.text != "")
-        {
-            self.column2=self.col2.text!
-        }
-        if(self.col3.text != "")
-        {
-            self.column3=self.col3.text!
-        }
-        if(self.col4.text != "")
-        {
-            self.column4=self.col4.text!
-        }
-        if(self.tasksnumb.text != "")
-        {
-            self.tasks=Int(self.tasksnumb.text!)!
-        }
+//        if(self.col1.text != "")
+//        {
+//            self.column1=self.col1.text!
+//        }
+//        if(self.col2.text != "")
+//        {
+//            self.column2=self.col2.text!
+//        }
+//        if(self.col3.text != "")
+//        {
+//            self.column3=self.col3.text!
+//        }
+//        if(self.col4.text != "")
+//        {
+//            self.column4=self.col4.text!
+//        }
+//        if(self.tasksnumb.text != "")
+//        {
+//            self.tasks=Int(self.tasksnumb.text!)!
+//        }
         if(self.des.text != "")
         {
             self.desc=self.des.text!
@@ -67,7 +67,7 @@ class addingCategoriesViewController: UIViewController {
        //call inserting function from php
         let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/addCategory.php")! as URL)
         request.httpMethod="POST"
-        let postString = "CName=\(nameofCate.text! as String)&Csubtitle=\(self.desc as String)&email=\(self.email)&numbtasks=\(self.tasks as Int)&colname1=\(self.column1 as String)&colname2=\(self.column2 as String)&colname3=\(self.column3 as String)&colname4=\(self.column4 as String)"
+        let postString = "CName=\(nameofCate.text! as String)&Csubtitle=\(self.desc as String)&email=\(self.email)"
         request.httpBody = postString.data(using: String.Encoding.utf8)
         let task = URLSession.shared.dataTask(with: request as URLRequest){
             data, response, error in
