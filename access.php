@@ -65,6 +65,24 @@
            //echo "return value is $returnValue :::::::";
            return $returnValue;
         }
+        //save location of file
+        public function savefilepath($email,$pathforfile)
+        {
+          //echo "reached";
+         $sql = "UPDATE users SET filelocation=? WHERE email=?"; 
+         $statement=$this->conn->prepare($sql);
+         if(!$statement)
+           {
+            //echo $pathforfile;
+            throw new Exception($statement->error);
+           }
+           $statement->bind_param("ss", $pathforfile,$email);
+           $returnValue = $statement->execute();
+           //echo $returnValue;
+            return $returnValue;
+
+
+        }
         //select user information
         public function selectUser($username)
         {
@@ -73,6 +91,25 @@
             //assign result we got from sql to $result var
             $result = $this->conn->query($sql);
             if ($result != null && (mysqli_num_rows($result) >= 1))
+            {
+               
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                if (!empty($row))
+                {
+                    
+                    $returnArray = $row;
+                }
+            }
+            
+            return $returnArray;
+        }
+        //get the file url
+        public function getpath($email)
+        {
+        	$sql = "SELECT filelocation FROM users WHERE email='". $email."'";
+        	$result = $this->conn->query($sql);
+
+            if ($result != null && (mysqli_num_rows($result) == 1))
             {
                
                 $row = $result->fetch_array(MYSQLI_ASSOC);
@@ -144,29 +181,29 @@
            // echo "The array is $returnArray";
             return $returnArray;
         }
-public function categoriesdata($email,$firstlogin,$addcat)
+public function categoriesdata($email)
         {
             //echo "entered";
             $categories=array();
-         if($firstlogin == 1 && $addcat == 2)
-             {
-               // echo " is 1";
-                $sql = "SELECT * FROM CategoriesDefault";
-            //echo"$sql";
-                if ($this->conn != null)
-                { 
-                    //echo "not null";
-                    $result = $this->conn->query($sql);
-                }
-                else
-                {
-                    //echo "is null";
-                }
+         // if($firstlogin == 1 && $addcat == 2)
+         //     {
+         //       // echo " is 1";
+         //        $sql = "SELECT * FROM CategoriesDefault";
+         //    //echo"$sql";
+         //        if ($this->conn != null)
+         //        { 
+         //            //echo "not null";
+         //            $result = $this->conn->query($sql);
+         //        }
+         //        else
+         //        {
+         //            //echo "is null";
+         //        }
             
-            //echo "$result";
-            }
-            else
-            {
+         //    //echo "$result";
+         //    }
+            //  else
+            // {
                 //echo "is 0";
                 $sql = "SELECT * FROM Categories WHERE email='". $email."'";
                if ($this->conn != null)
@@ -179,7 +216,7 @@ public function categoriesdata($email,$firstlogin,$addcat)
                    // echo "is null";
                 }
                 //echo "$result";
-            }
+            // }
             //echo "passes";
             //echo"$sql";
             
@@ -268,7 +305,7 @@ public function generateTID()
                 $cid=$num;
             }
     }
-
+//print($num);
             return $num;
 }
 
@@ -294,12 +331,14 @@ public function insertCategory($rescatid,$email,$Cname,$Csubtitle)
            //echo "return value is $returnValue :::::::";
            return $returnValue;
 }
-public function insertTasks($restid,$rescatid)
+public function insertTasks($restid,$rescatid,$taskname)
 {
 //echo "enetred register user";
             //SQL COMMAND
            // $sql = "INSERT INTO users SET username = ?, password = ?, email = ?";
-            $sql = "INSERT INTO Tasks (TID,CID) VALUES (?, ?)";
+            $sql = "INSERT INTO Tasks (TID,CID,Tname) VALUES (?, ?, ?)";
+            //$sql = "INSERT INTO Tasks (TID,CID) VALUES ($restid,$rescatid)";
+            //print($sql);
             //store query result in $statement
            $statement = $this->conn->prepare($sql);
            //if error
@@ -308,7 +347,7 @@ public function insertTasks($restid,$rescatid)
             throw new Exception($statement->error);
            }
            //bind 3 parameters of type string to be placed in sql command
-           $statement->bind_param("ii", $restid, $rescatid);
+           $statement->bind_param("iis", $restid, $rescatid, $taskname);
            // $statement->bindparam(1,$username);
            // $statement->bindparam(2,$password);
            // $statement->bindparam(3,$email);
@@ -337,6 +376,72 @@ public function insertColumn($restid,$rescatid,$nameofcol)
            $returnValue = $statement->execute();
            //echo "return value is $returnValue :::::::";
            return $returnValue;
+}
+
+public function getTasks($cat)
+{
+  $tasks=array();
+         // if($firstlogin == 1 && $addedcat == 2)
+         //     {
+         //       // echo " is 1";
+         //        $sql = "SELECT * FROM TasksDefault";
+         //    //echo"$sql";
+         //        if ($this->conn != null)
+         //        { 
+         //            //echo "not null";
+         //            $result = $this->conn->query($sql);
+         //        }
+         //        else
+         //        {
+         //            //echo "is null";
+         //        }
+            
+         //    //echo "$result";
+         //    }
+            // else
+            // {
+                //echo "is 0";
+                $sql = "SELECT * FROM Tasks WHERE CID='". $cat."'";
+               if ($this->conn != null)
+                { 
+                    //echo "not null";
+                    $result = $this->conn->query($sql);
+                }
+                else
+                {
+                   // echo "is null";
+                }
+                //echo "$result";
+            //}
+            //echo "passes";
+            //echo"$sql";
+            
+
+            if ($result != null && (mysqli_num_rows($result) > 0))
+            {
+                //echo "entered if of select user";
+               // $row = $result->fetch_array(MYSQLI_ASSOC);
+                //echo "entered if";
+                while($row=$result->fetch_assoc())
+            {
+                //echo "row is $row";
+
+                array_push($tasks,$row);
+            }
+     
+                if (!empty($tasks))
+                {
+                   // echo "entered not empty of select ser and the row is $row";
+                    $returnArray = $tasks;
+                }
+            }
+            else
+            {
+                //echo "enterd null";
+            }
+            //echo json_encode($categories);
+          // echo "\n The array is $categories";
+            return $returnArray;
 }
 
     }

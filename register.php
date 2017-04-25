@@ -5,6 +5,7 @@
 $username = htmlentities($_REQUEST["username"]);
 $password = htmlentities($_REQUEST["password"]);
 $email = htmlentities($_REQUEST["email"]);
+
 if (empty($username) || empty($password) || empty($email)) {
 //echo "not empty";
 	$returnArray["status"]="400";
@@ -39,6 +40,27 @@ if($result)
 	$returnArray["Date"] = $user["date"];
 	$returnArray["UserName"] = $user["username"];
 	$returnArray["Email"] = $user["email"];
+
+//adding default categories
+	//$rescatid=$access->generateCID();
+	//$rescatid1=1;
+	$Cname1="Focus Group";
+	$CSubtitle1="Testing the usage of each developed product";
+	//$rescatid2=2;
+	$Cname2="Usability Study";
+	$CSubtitle2="Requirements gathering observations";
+	//$rescatid3=3;
+	$Cname3="Dynamic Event Observation";
+	$CSubtitle3="Testing the products in mobile environment";
+
+		$rescatid1=$access->generateCID();
+ 		$resinscat1=$access->insertCategory($rescatid1,$email,$Cname1,$CSubtitle1);
+ 		$rescatid2=$access->generateCID();
+ 		$resinscat2=$access->insertCategory($rescatid2,$email,$Cname2,$CSubtitle2);
+ 		$rescatid3=$access->generateCID();
+ 		$resinscat3=$access->insertCategory($rescatid3,$email,$Cname3,$CSubtitle3);
+
+
 
 //echo "The user ino is $returnArray";
 	//STEP-5 json data printing
