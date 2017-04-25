@@ -3,8 +3,8 @@
 //echo "hiiiii";
 $email = htmlentities($_REQUEST["email"]);
 $firstLogin = htmlentities($_REQUEST["firstLogin"]);
-$addcat = htmlentities($_REQUEST["addcat"]);
-if (empty($firstLogin) || empty($email) || empty($addcat)) 
+//$addcat = htmlentities($_REQUEST["addcat"]);
+if (empty($email) || empty($firstLogin)) 
 {
 //echo "not empty";
 	$returnArray["status"]="400";
@@ -20,7 +20,7 @@ $name = trim($file["dbname"]);
 require("secure/access.php");
 $access = new access($host,$user,$pass,$name);
 $access->connect();
-$result = $access->categoriesdata($email,$firstLogin,$addcat);
+$result = $access->categoriesdata($email);
 if($firstLogin==1)
 {
 	//echo "enterdGGGGG";
