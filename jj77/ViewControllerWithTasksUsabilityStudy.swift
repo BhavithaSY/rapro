@@ -13,6 +13,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
     
     var dataobservedtoadd=[[String:String]]()
     var dataobservedwhole=[[String:String]]()
+    var tasksID=[Int]()
     var date=Date()
     var formatter=DateFormatter()
     var email=String()
@@ -231,11 +232,71 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         
             if editingStyle == .delete
             {
+                let datatobedeleted = self.tasksList[indexPath.row]
+                let taskIDtobedeleted = self.tasksID[indexPath.row]
+                print(taskIDtobedeleted)
                 self.tasksList.remove(at: indexPath.row)
                 tableView.reloadData()
+                
+                
                 //delete the task from database here
                 
+                let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/deleteTasks.php")! as URL)
+                request.httpMethod="POST"
+                let postString = "taskID=\(taskIDtobedeleted)"
+                request.httpBody = postString.data(using: String.Encoding.utf8)
+                let task = URLSession.shared.dataTask(with: request as URLRequest){
+                    data, response, error in
+                    if error == nil
+                        
+                    {
+                        //print(data)
+                        print("entered error is nil")
+                        DispatchQueue.main.async (execute: { () -> Void in
+                            
+                            do {
+                                
+                                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                                
+                                guard let parseJson = json else{
+                                    print("error")
+                                    return
+                                }
+                                print(parseJson)
+                                let status:String=parseJson["status"] as! String
+                                
+                                if status == "200"{
+                                    print("deleted task success")
+                                    
+                                }
+                                else{
+                                    print("can not delete task")
+                                }
+
+                            
+                            }catch
+                            {
+                                print("error: \(error)")
+                            }
+                            //print("response = \(response)")
+                            let responseString = NSString(data: data!,encoding:String.Encoding.utf8.rawValue)
+                            print("response string = \(responseString!)")
+                            
+                        })
+                        
+                        
+                    }
+                    else
+                    {
+                        //print("entered error is not nill")
+                        //print("error=\(error)")
+                        
+                        return
+                    }
+                }//task closing
+                task.resume()
                 
+
                 
                 
                 
@@ -296,6 +357,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
                         {
 
                         self.tasksList.append((json?[i]["Tname"]!)!)
+                            self.tasksID.append(Int((json?[i]["TID"]!)!)!)
                         }
                         print("tasks are:\(self.tasksList)")
                         self.tableWithTasks.reloadData()
