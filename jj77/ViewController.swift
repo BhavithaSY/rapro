@@ -176,7 +176,7 @@ class ViewController: UIViewController {
             
             //nets
             //dont let user have same user name
-            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/register.php")! as URL)
+            let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/register.php")! as URL)
             request.httpMethod="POST"
             let postString = "username=\(usernamesignup.text!)&password=\(passwordsignup.text!)&email=\(emailSignUp.text!)"
             request.httpBody = postString.data(using: String.Encoding.utf8)
@@ -259,23 +259,23 @@ class ViewController: UIViewController {
     {
         let nameforfolder:String = (name1) + (date)
         //creating a folder with name as user
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        //let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         //server location
-        //let documentsDirectory = NSURL(string:"http://localhost:8888/usersobservation")
-        let dataPath = documentsDirectory.appendingPathComponent("\(nameforfolder)")
+        let documentsDirectory = NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/usersobservation")
+        let dataPath = documentsDirectory?.appendingPathComponent("\(nameforfolder)")
         //UserDefaults.standard.set(dataPath, forKey: "fileLocation")
         print(dataPath)
         
         //path in string format
-        let pathstring = dataPath.path
+        let pathstring = dataPath?.path
         print("stirn path \(pathstring)")
         print("email is \(emik)")
         //pathstring.data
         
         do {
-            try FileManager.default.createDirectory(atPath: (dataPath.path), withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: (dataPath?.path)!, withIntermediateDirectories: true, attributes: nil)
             //connect with databse and inser the file path
-            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/savefilepath.php")! as URL)
+            let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/savefilepath.php")! as URL)
             request.httpMethod="POST"
             
             let postString = "email=\(emik)&pathforfile=\(dataPath)"
@@ -344,7 +344,7 @@ class ViewController: UIViewController {
         
         if(usernameLogin.text != "" && passwordLogin.text != "")
         {
-            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/login.php")! as URL)
+            let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/login.php")! as URL)
             request.httpMethod="POST"
             let postString = "email=\(usernameLogin.text!)&password=\(passwordLogin.text!)"
             request.httpBody = postString.data(using: String.Encoding.utf8)

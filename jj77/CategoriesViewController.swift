@@ -68,7 +68,7 @@ class CategoriesViewController: UIViewController,UITableViewDelegate, UITableVie
         //        if firstTimeLogin == 1
         //        {
         // here fetch the categories and subtitle form database categories default table
-        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/categoriesData.php")! as URL)
+        let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/categoriesData.php")! as URL)
         request.httpMethod="POST"
         print(self.firstTimeLogin)
         

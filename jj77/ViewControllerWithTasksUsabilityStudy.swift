@@ -72,7 +72,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         let currentDate=self.formatter.string(from: self.date)
         
         //write database connections
-        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/getfilepath.php")! as URL)
+        let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/getfilepath.php")! as URL)
         request.httpMethod="POST"
         let postString = "email=\(emil)"
         request.httpBody = postString.data(using: String.Encoding.utf8)
@@ -241,7 +241,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
                 
                 //delete the task from database here
                 
-                let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/deleteTasks.php")! as URL)
+                let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/deleteTasks.php")! as URL)
                 request.httpMethod="POST"
                 let postString = "taskID=\(taskIDtobedeleted)"
                 request.httpBody = postString.data(using: String.Encoding.utf8)
@@ -331,7 +331,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
         
         //connect to database and retrive the tasks from database
         
-        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/tasksretriving.php")! as URL)
+        let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/tasksretriving.php")! as URL)
         request.httpMethod="POST"
         let postString = "categoryID=\(self.catid)"
         request.httpBody = postString.data(using: String.Encoding.utf8)
@@ -436,7 +436,7 @@ class ViewControllerWithTasksUsabilityStudy: UIViewController,UITableViewDelegat
             //connect to database and add the task here
             
             
-            let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/inserttasksandcolumns.php")! as URL)
+            let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/inserttasksandcolumns.php")! as URL)
             request.httpMethod="POST"
             let postString = "categoryID=\(self.catid)&taskname=\(nameoftasktosend)"
             request.httpBody = postString.data(using: String.Encoding.utf8)

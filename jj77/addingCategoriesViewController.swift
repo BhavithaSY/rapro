@@ -65,7 +65,7 @@ class addingCategoriesViewController: UIViewController {
             self.desc=self.des.text!
         }
        //call inserting function from php
-        let request = NSMutableURLRequest(url:NSURL(string:"http://localhost:8888/PHP/DataCollection/addCategory.php")! as URL)
+        let request = NSMutableURLRequest(url:NSURL(string:"http://sceweb.sce.uhcl.edu/yendrathib/addCategory.php")! as URL)
         request.httpMethod="POST"
         let postString = "CName=\(nameofCate.text! as String)&Csubtitle=\(self.desc as String)&email=\(self.email)"
         request.httpBody = postString.data(using: String.Encoding.utf8)
