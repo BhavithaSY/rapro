@@ -39,7 +39,7 @@
             //echo "entered disconnect";
             if($this->conn != null)
             {
-                $this->con->close();
+                $this->conn->close();
             }
         }
        // inserting user details
@@ -150,7 +150,7 @@
             }
             else
             {
-              $returnArray = ["nothing","no"];
+              //$returnArray = ["nothing","no"];
                 //echo "enterd null";
             }
             //echo json_encode($categories);
@@ -444,5 +444,22 @@ public function getTasks($cat)
             return $returnArray;
 }
 
+
+public function deleteTasks($taskID)
+{
+      $sql = "DELETE FROM Tasks WHERE TID= '". $taskID."'";
+      $statement = $this->conn->prepare($sql);
+           //if error
+           if(!$statement)
+           {
+            throw new Exception($statement->error);
+           }
+           else
+           {
+           $returnValue = $statement->execute();
+         }
+           //echo "return value is $returnValue :::::::";
+           return $returnValue;
+}
     }
     ?>
